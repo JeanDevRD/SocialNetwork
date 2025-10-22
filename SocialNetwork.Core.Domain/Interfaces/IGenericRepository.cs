@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SocialNetwork.Core.Domain.Interfaces
 {
-    public interface IGenericRepository<Entity> where Entity : class
+    public interface IGenericRepository<Entity> 
+       where Entity : class
     {
         Task<Entity> AddAsync(Entity entity);
         Task<Entity> UpdateAsync(int id, Entity entity);

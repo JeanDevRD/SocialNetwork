@@ -2,7 +2,7 @@
 using SocialNetwork.Core.Domain.Entities;
 using System.Reflection;
 
-namespace SocialNetwork.Core.Persistence.Context
+namespace SocialNetwork.Infrastructure.Persistence.Context
 {
     public class SocialNetworkDbContext : DbContext
     {

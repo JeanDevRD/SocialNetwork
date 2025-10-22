@@ -28,5 +28,6 @@ namespace SocialNetwork.Core.Domain.Entities
      
         public ICollection<Game>? Player1 { get; set; }
         public ICollection<Game>? Player2 { get; set; }
+        public ICollection<Game>? GamesWon { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SocialNetwork.Core.Domain.Entities;
 
 
-namespace SocialNetwork.Core.Persistence.EntityConfiguration
+namespace SocialNetwork.Infrastructure.Persistence.EntityConfiguration
 {
     public class UserEntityConfiguration : IEntityTypeConfiguration<User>
     {

@@ -1,10 +1,16 @@
-using SocialNetwork.Core.Persistence; 
+using SocialNetwork.Core.Application;
+using SocialNetwork.Infrastructure.Identity;
+using SocialNetwork.Infrastructure.Persistence;
+using SocialNetwork.Infrastructure.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddApplicationServicesIoc();
 builder.Services.AddPersistenceServicesIoc(builder.Configuration);
+builder.Services.AddSharedServicesIoc(builder.Configuration);
+builder.Services.AddIdentityServicesIocWeb(builder.Configuration);
 
 var app = builder.Build();
 

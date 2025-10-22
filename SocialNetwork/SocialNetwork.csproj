@@ -17,8 +17,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SocialNetwork.Core.Application\SocialNetwork.Core.Application.csproj" />
-    <ProjectReference Include="..\SocialNetwork.Core.Persistence\SocialNetwork.Core.Persistence.csproj" />
-    <ProjectReference Include="..\SocialNetwork.Core.Shered\SocialNetwork.Core.Shered.csproj" />
+    <ProjectReference Include="..\SocialNetwork.Infrastructure.Identity\SocialNetwork.Infrastructure.Identity.csproj" />
+    <ProjectReference Include="..\SocialNetwork.Infrastructure.Persistence\SocialNetwork.Infrastructure.Persistence.csproj" />
+    <ProjectReference Include="..\SocialNetwork.Infrastructure.Shered\SocialNetwork.Infrastructure.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\PC\Desktop\SocialNetwork\SocialNetwork\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\PC\Desktop\SocialNetwork\SocialNetwork\.editorconfig" />
   </ItemGroup>
 
 </Project>

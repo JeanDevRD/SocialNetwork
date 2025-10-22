@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36429.23 d17.14
+VisualStudioVersion = 17.14.36429.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork", "SocialNetwork\SocialNetwork.csproj", "{A387C213-A8B7-4317-8729-B2FDA23E0E68}"
 EndProject
@@ -17,9 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.Core.Domain",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.Core.Application", "SocialNetwork.Core.Application\SocialNetwork.Core.Application.csproj", "{26BA48F8-5E99-4125-A67C-FE7FDC3F8B1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.Core.Persistence", "SocialNetwork.Core.Persistence\SocialNetwork.Core.Persistence.csproj", "{C726F72D-856D-40DC-B85B-51EB07E5D50A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.Infrastructure.Persistence", "SocialNetwork.Infrastructure.Persistence\SocialNetwork.Infrastructure.Persistence.csproj", "{C726F72D-856D-40DC-B85B-51EB07E5D50A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.Core.Shered", "SocialNetwork.Core.Shered\SocialNetwork.Core.Shered.csproj", "{62E1D2EA-CD8E-44AD-B73E-A5DA4F83259E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.Infrastructure.Shared", "SocialNetwork.Infrastructure.Shered\SocialNetwork.Infrastructure.Shared.csproj", "{62E1D2EA-CD8E-44AD-B73E-A5DA4F83259E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.Infrastructure.Identity", "SocialNetwork.Infrastructure.Identity\SocialNetwork.Infrastructure.Identity.csproj", "{F291199A-E8FD-4BD0-AF4E-F096E54A00C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{62E1D2EA-CD8E-44AD-B73E-A5DA4F83259E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62E1D2EA-CD8E-44AD-B73E-A5DA4F83259E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62E1D2EA-CD8E-44AD-B73E-A5DA4F83259E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F291199A-E8FD-4BD0-AF4E-F096E54A00C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F291199A-E8FD-4BD0-AF4E-F096E54A00C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F291199A-E8FD-4BD0-AF4E-F096E54A00C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F291199A-E8FD-4BD0-AF4E-F096E54A00C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{26BA48F8-5E99-4125-A67C-FE7FDC3F8B1F} = {E8C9714C-E772-4CD0-92F2-0DE5A114D866}
 		{C726F72D-856D-40DC-B85B-51EB07E5D50A} = {389C7CC1-C903-4DCE-B6D4-2F085A22F639}
 		{62E1D2EA-CD8E-44AD-B73E-A5DA4F83259E} = {389C7CC1-C903-4DCE-B6D4-2F085A22F639}
+		{F291199A-E8FD-4BD0-AF4E-F096E54A00C2} = {389C7CC1-C903-4DCE-B6D4-2F085A22F639}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D10FE75-2B88-4F42-8F70-87B98C5D022A}

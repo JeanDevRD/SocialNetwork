@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-
+﻿
 namespace SocialNetwork.Core.Domain.Entities
 {
     public class Game : CommonEntity<int>
@@ -12,11 +10,14 @@ namespace SocialNetwork.Core.Domain.Entities
         public User? Player2 { get; set; }
 
         public required DateTime Started { get; set; }
-        public required DateTime  Ended { get; set; }
-        public required string Status { get; set; } 
-        public required User Winner { get; set; }
+        public DateTime? Ended { get; set; }  
+        public required string Status { get; set; }  
+        public int? WinnerId { get; set; }  
+        public User? Winner { get; set; }
+        public required int CurrentTurnPlayerId { get; set; }  
 
         public ICollection<Ship>? Ships { get; set; }
         public ICollection<Attack>? Attacks { get; set; }
     }
 }
+

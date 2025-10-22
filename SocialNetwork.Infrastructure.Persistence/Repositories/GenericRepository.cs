@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Core.Domain.Interfaces;
-using SocialNetwork.Core.Persistence.Context;
+using SocialNetwork.Infrastructure.Persistence.Context;
 
-namespace SocialNetwork.Core.Persistence.Repositories
+namespace SocialNetwork.Infrastructure.Persistence.Repositories
 {
-    public class GenericRepository <Entity> : IGenericRepository<Entity> 
+    public class GenericRepository<Entity> : IGenericRepository<Entity> 
         where Entity : class
     {
         public readonly SocialNetworkDbContext _context;

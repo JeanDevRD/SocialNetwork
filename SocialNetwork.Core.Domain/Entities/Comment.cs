@@ -8,7 +8,7 @@ namespace SocialNetwork.Core.Domain.Entities
 
         public required int UserId { get; set; }
         public required int PostId { get; set; }
-        public required int ParentCommentId { get; set; }
+        public int? ParentCommentId { get; set; }
 
         public User? Author { get; set; }
         public Post? Post { get; set; }
