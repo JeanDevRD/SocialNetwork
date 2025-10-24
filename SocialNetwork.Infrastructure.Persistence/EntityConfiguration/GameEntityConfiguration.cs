@@ -40,11 +40,6 @@ namespace SocialNetwork.Infrastructure.Persistence.EntityConfiguration
 
             #region Relationships
 
-            builder.HasOne(x => x.Winner)
-                .WithMany()
-                .HasForeignKey(x => x.WinnerId)
-                .OnDelete(DeleteBehavior.NoAction);
-
             builder.HasMany(x => x.Ships)
                 .WithOne(s => s.Game)
                 .HasForeignKey(s => s.GameId)

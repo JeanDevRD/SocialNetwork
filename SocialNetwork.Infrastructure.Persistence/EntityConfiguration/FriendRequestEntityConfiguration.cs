@@ -29,8 +29,10 @@ namespace SocialNetwork.Infrastructure.Persistence.EntityConfiguration
                 .IsRequired();
             #endregion
 
+         
+
             #region Indexes
-     
+
             builder.HasIndex(x => new { x.ReceiverId, x.Status });
 
             builder.HasIndex(x => new { x.SenderId, x.Status });

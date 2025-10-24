@@ -13,11 +13,11 @@ namespace SocialNetwork.Core.Application.Services
         private IUserRepository _userRepository;
         private IEmailService _emailService;
         private IMapper _mapper;
-        public UserService(IUserRepository userRepository, IEmailService emailService, IMapper mapp)
+        public UserService(IUserRepository userRepository, IEmailService emailService, IMapper map)
         {
             _userRepository = userRepository;
             _emailService = emailService;
-            _mapper = mapp;
+            _mapper = map;
         }
 
         public async Task<UserDto?> AddAsync(CreateUserDto dto)

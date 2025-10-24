@@ -9,7 +9,6 @@ namespace SocialNetwork.Core.Domain.Entities
         public required DateTime Created { get; set; }
 
         public required int UserId { get; set; }
-        public User? Author { get; set; }
 
         public ICollection<Comment>? Comments { get; set; }
         public ICollection<Reaction>? Reactions { get; set; }

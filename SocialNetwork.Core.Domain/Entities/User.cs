@@ -1,7 +1,12 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace SocialNetwork.Core.Domain.Entities
 {
-    public class User : CommonEntity<int>
+    public class User
     {
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
@@ -11,23 +16,5 @@ namespace SocialNetwork.Core.Domain.Entities
         public required string Password { get; set; }
         public required string Profile { get; set; }
         public required bool IsActive { get; set; }
-
-
-        public ICollection<Post>? Posts { get; set; }
-        public ICollection<Comment>? Comments { get; set; }
-        public ICollection<Reaction>? Reactions { get; set; }
-
-  
-        public ICollection<FriendShip>? Friends { get; set; }      
-        public ICollection<FriendShip>? FriendOf { get; set; }       
-
-      
-        public ICollection<FriendRequest>? SentRequests { get; set; }
-        public ICollection<FriendRequest>? ReceivedRequests { get; set; }
-
-     
-        public ICollection<Game>? Player1 { get; set; }
-        public ICollection<Game>? Player2 { get; set; }
-        public ICollection<Game>? GamesWon { get; set; }
     }
 }

@@ -25,11 +25,11 @@ namespace SocialNetwork.Infrastructure.Persistence.EntityConfiguration
             #endregion
 
             #region Relationships
-
+           
             #endregion
 
             #region Indexes
-   
+
             builder.HasIndex(x => new { x.UserId, x.FriendId })
                 .IsUnique();
             #endregion

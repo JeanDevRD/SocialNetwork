@@ -9,7 +9,7 @@ namespace SocialNetwork.Infrastructure.Persistence
     {
         public static void AddPersistenceServicesIoc(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("IdentityConnection");
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<SocialNetworkDbContext>
             (

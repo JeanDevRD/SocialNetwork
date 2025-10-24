@@ -10,7 +10,6 @@ namespace SocialNetwork.Core.Domain.Entities
         public required int PostId { get; set; }
         public int? ParentCommentId { get; set; }
 
-        public User? Author { get; set; }
         public Post? Post { get; set; }
         public Comment? ParentComment { get; set; }
         public ICollection<Comment>? Replies { get; set; }

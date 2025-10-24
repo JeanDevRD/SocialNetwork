@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Mappers\EntityToDto\" />
     <Folder Include="Mappers\DtoToViewModel\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>

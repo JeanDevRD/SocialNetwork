@@ -35,10 +35,6 @@ namespace SocialNetwork.Infrastructure.Persistence.EntityConfiguration
 
             #region Relationships
 
-            builder.HasOne(x => x.Attacker)
-                .WithMany()
-                .HasForeignKey(x => x.AttackerId)
-                .OnDelete(DeleteBehavior.NoAction);
 
             #endregion
 

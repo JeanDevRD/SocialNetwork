@@ -9,8 +9,9 @@ using SocialNetwork.Core.Application.DTOs.Reaction;
 
 namespace SocialNetwork.Core.Application.DTOs.User
 {
-    public class UserDto : CommonEntityDto<int>
+    public class UserDto 
     {
+        public required string Id { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required string Phone { get; set; }
@@ -18,23 +19,9 @@ namespace SocialNetwork.Core.Application.DTOs.User
         public required string Username { get; set; }
         public required string Profile { get; set; }
         public required bool IsActive { get; set; }
+        public required bool IsVerified { get; set; }
 
 
-        public ICollection<PostDto>? Posts { get; set; }
-        public ICollection<CommentDto>? Comments { get; set; }
-        public ICollection<ReactionDto>? Reactions { get; set; }
 
-
-        public ICollection<FriendShipDto>? Friends { get; set; }
-        public ICollection<FriendShipDto>? FriendOf { get; set; }
-
-
-        public ICollection<FriendRequestDto>? SentRequests { get; set; }
-        public ICollection<FriendRequestDto>? ReceivedRequests { get; set; }
-
-
-        public ICollection<GameDto>? Player1 { get; set; }
-        public ICollection<GameDto>? Player2 { get; set; }
-        public ICollection<GameDto>? GamesWon { get; set; }
     }
 }

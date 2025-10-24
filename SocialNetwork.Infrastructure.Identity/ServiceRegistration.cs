@@ -1,9 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Client;
+using SocialNetwork_Infrastructure.Identity.Context;
 using SocialNetwork_Infrastructure.Identity.Entities;
-using Microsoft.AspNetCore.Identity;
+using SocialNetwork_Infrastructure.Identity.Seed;
+using System.Reflection;
 
 namespace SocialNetwork.Infrastructure.Identity
 {
@@ -29,11 +33,13 @@ namespace SocialNetwork.Infrastructure.Identity
 
             });
 
+            services.AddAutoMapper(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+
             ConfigureDbContext(services, configuration);
             #region
             services.AddIdentityCore<UserEntity>()
             .AddSignInManager()
-            .AddEntityFrameworkStores<IdentityDbContext>()
+            .AddEntityFrameworkStores<IdentityAppContext>()
             .AddTokenProvider<DataProtectorTokenProvider<UserEntity>>(TokenOptions.DefaultProvider);
 
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
@@ -58,19 +64,32 @@ namespace SocialNetwork.Infrastructure.Identity
 
         }
 
+        public static async Task SeedDefaultUserAsync(this IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var userManager = services.GetRequiredService<UserManager<UserEntity>>();
+                
+                await DefaultUser.SeedAsync(userManager);
+
+            }
+        }
+
         #region private methods
         private static void ConfigureDbContext(IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("IdentityConnection");
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContext<IdentityDbContext>
+            services.AddDbContext<IdentityAppContext>
             (
                 (ServiceProvider, Opt) =>
                 {
                     
                     Opt.EnableSensitiveDataLogging();
                     Opt.UseSqlServer(connectionString,
-                    m => m.MigrationsAssembly(typeof(IdentityDbContext).Assembly.FullName));
+                    m => m.MigrationsAssembly(typeof(IdentityAppContext).Assembly.FullName));
                 },
                 contextLifetime: ServiceLifetime.Scoped,
                 optionsLifetime: ServiceLifetime.Scoped

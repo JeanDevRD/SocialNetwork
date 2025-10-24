@@ -35,9 +35,14 @@ namespace SocialNetwork.Infrastructure.Persistence.EntityConfiguration
             #region Relationships
 
             builder.HasOne(x => x.ParentComment)
-                .WithMany(c => c.Replies)
-                .HasForeignKey(x => x.ParentCommentId)
-                .OnDelete(DeleteBehavior.NoAction);
+              .WithMany(c => c.Replies)
+              .HasForeignKey(x => x.ParentCommentId)
+              .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne(x => x.Post)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(x => x.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
         }

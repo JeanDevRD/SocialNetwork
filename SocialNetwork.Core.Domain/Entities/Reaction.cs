@@ -7,8 +7,6 @@
 
         public required int UserId { get; set; }
         public required int PostId { get; set; }
-
-        public User? Author { get; set; }
         public Post? Post { get; set; }
     }
 }
