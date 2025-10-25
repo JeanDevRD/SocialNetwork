@@ -8,7 +8,7 @@ using SocialNetwork.Core.Domain.Interfaces;
 
 namespace SocialNetwork.Core.Application.Services
 {
-    public class UserService : IUserService
+    public class UserService 
     {
         private IUserRepository _userRepository;
         private IEmailService _emailService;
@@ -86,16 +86,7 @@ namespace SocialNetwork.Core.Application.Services
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task<UserDto?> UpdateAsync(CreateUserDto dto)
-        {
-            var existingUser = await _userRepository.GetByIdAsync(dto.Id);
-
-            if (existingUser == null) throw new Exception("User not found");
-
-            _mapper.Map(dto, existingUser);
-            var result = await _userRepository.UpdateAsync(dto.Id, existingUser);
-            return _mapper.Map<UserDto>(result);
-        }
+       
 
         public async Task<bool> ChangeStatusAsync(int id)
         {

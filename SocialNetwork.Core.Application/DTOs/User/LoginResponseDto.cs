@@ -16,6 +16,6 @@ namespace SocialNetwork.Core.Application.DTOs.User
         public required string Profile { get; set; } = "Images/DefaultProfile.png";
         public bool IsVerified { get; set; }
         public bool HasError { get; set; }
-        public string? ErrorMessage { get; set; }
+        public List<string>? ErrorMessage { get; set; }
     }
 }

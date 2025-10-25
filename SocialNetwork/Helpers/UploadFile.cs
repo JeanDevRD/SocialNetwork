@@ -2,7 +2,7 @@
 {
     public static class UploadFile
     {
-        public static string? Uploader(IFormFile? file, int id, string folderName, bool Edit = false, string? imagePath = "")
+        public static string? Uploader(IFormFile? file, string id, string folderName, bool Edit = false, string? imagePath = "")
         {
 
             if (file == null)

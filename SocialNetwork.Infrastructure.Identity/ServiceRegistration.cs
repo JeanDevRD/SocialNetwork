@@ -7,6 +7,7 @@ using Microsoft.Identity.Client;
 using SocialNetwork_Infrastructure.Identity.Context;
 using SocialNetwork_Infrastructure.Identity.Entities;
 using SocialNetwork_Infrastructure.Identity.Seed;
+using SocialNetwork_Infrastructure.Identity.Services;
 using System.Reflection;
 
 namespace SocialNetwork.Infrastructure.Identity
@@ -34,6 +35,7 @@ namespace SocialNetwork.Infrastructure.Identity
             });
 
             services.AddAutoMapper(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+            services.AddScoped<IAccountServiceWeb, AccountServiceWeb>();
 
             ConfigureDbContext(services, configuration);
             #region

@@ -2,7 +2,7 @@
 using SocialNetwork.Core.Application.DTOs.User;
 using SocialNetwork_Infrastructure.Identity.Entities;
 
-namespace SocialNetwork_Infrastructure.Identity.Mappers
+namespace SocialNetwork_Infrastructure.Identity.Mappers.EntityToDto
 {
     public class UserToLoginDtoMappingProfile : Profile
     {
