@@ -31,6 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Game\" />
+    <Folder Include="Views\User\" />
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 

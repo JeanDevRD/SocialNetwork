@@ -18,7 +18,7 @@ namespace SocialNetwork.Core.Application.DTOs.Post
         public string? VideoUrl { get; set; }
         public required DateTime Created { get; set; }
 
-        public required int UserId { get; set; }
+        public required string UserId { get; set; }
         public UserDto? Author { get; set; }
 
         public ICollection<CommentDto>? Comments { get; set; }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Core.Application.DTOs.Email;
+using SocialNetwork.Core.Application.DTOs.Game;
 using SocialNetwork.Core.Application.DTOs.User;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork_Infrastructure.Identity.Entities;
@@ -108,7 +109,17 @@ namespace SocialNetwork_Infrastructure.Identity.Services
                 return response;
             }
 
-            var user = _mapper.Map<UserEntity>(dto);
+            UserEntity user = new UserEntity()
+            {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Email = dto.Email,
+                UserName = dto.UserName,
+                Profile = string.IsNullOrWhiteSpace(dto.Profile) ? "Images/default_profile.png" : dto.Profile,
+                EmailConfirmed = false,
+                PhoneNumber = dto.PhoneNumber,
+                IsActive = dto.IsActive
+            };
 
 
             var result = await _userManager.CreateAsync(user, dto.PasswordHash);
@@ -367,11 +378,31 @@ namespace SocialNetwork_Infrastructure.Identity.Services
             {
                 return "El usuario no existe";
             }
-            token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
-            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return "El token de confirmación no fue proporcionado o está vacío.";
+            }
 
-            return result.Succeeded ? $"La cuenta ha sido confirmada para {user.Email}"
-                                    : $"Error al confirmar la cuenta{user.Email}";
+            try
+            {
+                var decoded = WebEncoders.Base64UrlDecode(token);
+                var code = Encoding.UTF8.GetString(decoded);
+                var result = await _userManager.ConfirmEmailAsync(user, code);
+
+                if (!user.IsActive)
+                {
+                    user.IsActive = true;
+                    await _userManager.UpdateAsync(user);
+                }
+
+                return result.Succeeded ? $"La cuenta ha sido confirmada para {user.Email}"
+                                        : $"Error al confirmar la cuenta {user.Email}";
+
+            }
+            catch (FormatException)
+            {
+                return "El token no tiene un formato válido.";
+            }
         }
         #region private methods
         private async Task<string> GetEmailVerificationUri(UserEntity user, string origin)
@@ -381,7 +412,8 @@ namespace SocialNetwork_Infrastructure.Identity.Services
             var route = "Login/ConfirmEmail";
             var Uri = new Uri(string.Concat($"{origin}/", route));
             var verificationUri = QueryHelpers.AddQueryString(Uri.ToString(), "userId", user.Id);
-            verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
+           
+            verificationUri = QueryHelpers.AddQueryString(verificationUri, "token", code);
             return verificationUri;
         }
 
@@ -392,7 +424,7 @@ namespace SocialNetwork_Infrastructure.Identity.Services
             var route = "Login/ResetPassword";
             var Uri = new Uri(string.Concat($"{origin}/", route));
             var resetUri = QueryHelpers.AddQueryString(Uri.ToString(), "userId", user.Id);
-            resetUri = QueryHelpers.AddQueryString(Uri.ToString(), "code", code);
+            resetUri = QueryHelpers.AddQueryString(resetUri, "token", code);
             return resetUri;
         }
         #endregion

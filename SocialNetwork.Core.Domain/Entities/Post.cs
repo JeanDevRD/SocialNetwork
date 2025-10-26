@@ -8,7 +8,7 @@ namespace SocialNetwork.Core.Domain.Entities
         public string? VideoUrl { get; set; }    
         public required DateTime Created { get; set; }
 
-        public required int UserId { get; set; }
+        public required string UserId { get; set; }
 
         public ICollection<Comment>? Comments { get; set; }
         public ICollection<Reaction>? Reactions { get; set; }

@@ -21,13 +21,8 @@ namespace SocialNetwork.Controllers
             _mapper = mapper;
             _userManager = userManager;
         }
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> Index(UserLoginDto userLoginDto)
+    
+        public async Task<IActionResult> Index()
         {
             UserEntity? userSession = await _userManager.GetUserAsync(User);
 
@@ -116,6 +111,7 @@ namespace SocialNetwork.Controllers
                 return View(vm);
             }
             CreateUserDto userDto = _mapper.Map<CreateUserDto>(vm);
+
             string origin = Request?.Headers?.Origin.ToString() ?? string.Empty;
 
             RegisterResponseDto? response = await _accountServiceWeb.RegisterUser(userDto, origin);
@@ -133,10 +129,6 @@ namespace SocialNetwork.Controllers
                 if (vm.Profile != null)
                 {
                     userDto.Profile = UploadFile.Uploader(vm.Profile, userDto.Id, "Users");
-                }
-                else
-                {
-                    userDto.Profile = "Images/DefaultProfile.png";
                 }
                 await _accountServiceWeb.EditUser(userDto , origin, true);
             }

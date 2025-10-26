@@ -6,31 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SocialNetwork.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Profile = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "FriendRequests",
                 columns: table => new
@@ -45,16 +25,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FriendRequests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_FriendRequests_Users_ReceiverId",
-                        column: x => x.ReceiverId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_FriendRequests_Users_SenderId",
-                        column: x => x.SenderId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -70,16 +40,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FriendShips", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_FriendShips_Users_FriendId",
-                        column: x => x.FriendId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_FriendShips_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -99,21 +59,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Games", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Games_Users_Player1Id",
-                        column: x => x.Player1Id,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Games_Users_Player2Id",
-                        column: x => x.Player2Id,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Games_Users_WinnerId",
-                        column: x => x.WinnerId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -131,12 +76,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Posts_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -161,11 +100,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                         principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Attacks_Users_AttackerId",
-                        column: x => x.AttackerId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -191,11 +125,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                         principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Ships_Users_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -224,12 +153,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Comments_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -252,18 +175,7 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reactions_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Attacks_AttackerId",
-                table: "Attacks",
-                column: "AttackerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Attacks_GameId",
@@ -287,11 +199,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId",
-                table: "Comments",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FriendRequests_ReceiverId_Status",
                 table: "FriendRequests",
                 columns: new[] { "ReceiverId", "Status" });
@@ -300,11 +207,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                 name: "IX_FriendRequests_SenderId_Status",
                 table: "FriendRequests",
                 columns: new[] { "SenderId", "Status" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FriendShips_FriendId",
-                table: "FriendShips",
-                column: "FriendId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FriendShips_UserId_FriendId",
@@ -323,16 +225,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                 columns: new[] { "Player2Id", "Status" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_WinnerId",
-                table: "Games",
-                column: "WinnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Posts_UserId",
-                table: "Posts",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Reactions_PostId",
                 table: "Reactions",
                 column: "PostId");
@@ -347,11 +239,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                 name: "IX_Ships_GameId_OwnerId",
                 table: "Ships",
                 columns: new[] { "GameId", "OwnerId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Ships_OwnerId",
-                table: "Ships",
-                column: "OwnerId");
         }
 
         /// <inheritdoc />
@@ -380,9 +267,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Games");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

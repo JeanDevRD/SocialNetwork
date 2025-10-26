@@ -12,7 +12,7 @@ using SocialNetwork.Infrastructure.Persistence.Context;
 namespace SocialNetwork.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SocialNetworkDbContext))]
-    [Migration("20251022110921_InitialCreate")]
+    [Migration("20251025200958_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -53,8 +53,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AttackerId");
-
                     b.HasIndex("GameId");
 
                     b.HasIndex("GameId", "Row", "Column")
@@ -93,8 +91,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                     b.HasIndex("ParentCommentId");
 
                     b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Comments", (string)null);
                 });
@@ -149,8 +145,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FriendId");
-
                     b.HasIndex("UserId", "FriendId")
                         .IsUnique();
 
@@ -190,8 +184,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WinnerId");
-
                     b.HasIndex("Player1Id", "Status");
 
                     b.HasIndex("Player2Id", "Status");
@@ -227,8 +219,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Posts", (string)null);
                 });
@@ -300,76 +290,18 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
-
                     b.HasIndex("GameId", "OwnerId");
 
                     b.ToTable("Ships", (string)null);
                 });
 
-            modelBuilder.Entity("SocialNetwork.Core.Domain.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("Profile")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users", (string)null);
-                });
-
             modelBuilder.Entity("SocialNetwork.Core.Domain.Entities.Attack", b =>
                 {
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Attacker")
-                        .WithMany()
-                        .HasForeignKey("AttackerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("SocialNetwork.Core.Domain.Entities.Game", "Game")
                         .WithMany("Attacks")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Attacker");
 
                     b.Navigation("Game");
                 });
@@ -387,92 +319,9 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Author")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
                     b.Navigation("ParentComment");
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("SocialNetwork.Core.Domain.Entities.FriendRequest", b =>
-                {
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Receiver")
-                        .WithMany("ReceivedRequests")
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Sender")
-                        .WithMany("SentRequests")
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("SocialNetwork.Core.Domain.Entities.FriendShip", b =>
-                {
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Friend")
-                        .WithMany("FriendOf")
-                        .HasForeignKey("FriendId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "User")
-                        .WithMany("Friends")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Friend");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SocialNetwork.Core.Domain.Entities.Game", b =>
-                {
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Player1")
-                        .WithMany("Player1")
-                        .HasForeignKey("Player1Id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Player2")
-                        .WithMany("Player2")
-                        .HasForeignKey("Player2Id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Winner")
-                        .WithMany("GamesWon")
-                        .HasForeignKey("WinnerId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Player1");
-
-                    b.Navigation("Player2");
-
-                    b.Navigation("Winner");
-                });
-
-            modelBuilder.Entity("SocialNetwork.Core.Domain.Entities.Post", b =>
-                {
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Author")
-                        .WithMany("Posts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("SocialNetwork.Core.Domain.Entities.Reaction", b =>
@@ -482,14 +331,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Author")
-                        .WithMany("Reactions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Author");
 
                     b.Navigation("Post");
                 });
@@ -502,15 +343,7 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SocialNetwork.Core.Domain.Entities.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("Game");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("SocialNetwork.Core.Domain.Entities.Comment", b =>
@@ -530,29 +363,6 @@ namespace SocialNetwork.Infrastructure.Persistence.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Reactions");
-                });
-
-            modelBuilder.Entity("SocialNetwork.Core.Domain.Entities.User", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("FriendOf");
-
-                    b.Navigation("Friends");
-
-                    b.Navigation("GamesWon");
-
-                    b.Navigation("Player1");
-
-                    b.Navigation("Player2");
-
-                    b.Navigation("Posts");
-
-                    b.Navigation("Reactions");
-
-                    b.Navigation("ReceivedRequests");
-
-                    b.Navigation("SentRequests");
                 });
 #pragma warning restore 612, 618
         }
