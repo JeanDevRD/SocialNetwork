@@ -54,8 +54,15 @@ namespace SocialNetwork.Controllers
                 ViewBag.Error = "Error al Crear publicación, los datos son inválidos";
                 return View(vm);
             }
-           
 
+            if (!string.IsNullOrEmpty(vm.VideoUrl))
+            {
+                if (!vm.VideoUrl.Contains("youtube.com") && !vm.VideoUrl.Contains("youtu.be"))
+                {
+                    ModelState.AddModelError("VideoUrl", "Solo se permiten enlaces de YouTube");
+                    return View(vm);
+                }
+            }
             try
             {
                 vm.UserId = userSession.Id;

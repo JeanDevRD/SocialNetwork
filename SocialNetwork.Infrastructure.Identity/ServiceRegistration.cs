@@ -2,12 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Client;
-using SocialNetwork_Infrastructure.Identity.Context;
-using SocialNetwork_Infrastructure.Identity.Entities;
-using SocialNetwork_Infrastructure.Identity.Seed;
-using SocialNetwork_Infrastructure.Identity.Services;
+
+using SocialNetwork.Infrastructure.Core.Application.Interfaces;
+using SocialNetwork.Infrastructure.Identity.Context;
+using SocialNetwork.Infrastructure.Identity.Entities;
+using SocialNetwork.Infrastructure.Identity.Seed;
+using SocialNetwork.Infrastructure.Identity.Services;
 using System.Reflection;
 
 namespace SocialNetwork.Infrastructure.Identity
@@ -54,7 +54,7 @@ namespace SocialNetwork.Infrastructure.Identity
                 opt.DefaultScheme = IdentityConstants.ApplicationScheme;
                 opt.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
                 opt.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
-            }).AddCookie(opt =>
+            }).AddCookie(IdentityConstants.ApplicationScheme, opt =>
             {
                 opt.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 

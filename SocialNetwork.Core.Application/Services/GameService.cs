@@ -40,7 +40,7 @@ namespace SocialNetwork.Core.Application.Services
             }
         }
 
-        public async Task<bool> FinishGameAsync(int gameId, int winnerId)
+        public async Task<bool> FinishGameAsync(int gameId, string winnerId)
         {
             try
             {
@@ -64,14 +64,14 @@ namespace SocialNetwork.Core.Application.Services
             }
         }
 
-        public async Task<bool> SurrenderGameAsync(int gameId, int surrenderingPlayerId)
+        public async Task<bool> SurrenderGameAsync(int gameId, string surrenderingPlayerId)
         {
             try
             {
                 var game = await _repo.GetByIdAsync(gameId);
                 if (game == null) return false;
 
-                int winnerId = game.Player1Id == surrenderingPlayerId
+                string winnerId = game.Player1Id == surrenderingPlayerId
                     ? game.Player2Id
                     : game.Player1Id;
 

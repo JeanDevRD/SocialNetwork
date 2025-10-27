@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Core.Application.DTOs.Email;
-using SocialNetwork.Core.Application.DTOs.Game;
 using SocialNetwork.Core.Application.DTOs.User;
 using SocialNetwork.Core.Application.Interfaces;
-using SocialNetwork_Infrastructure.Identity.Entities;
+using SocialNetwork.Infrastructure.Identity.Entities;
 using System.Text;
 
 
-namespace SocialNetwork_Infrastructure.Identity.Services
+namespace SocialNetwork.Infrastructure.Identity.Services
 {
     public class AccountServiceWeb : IAccountServiceWeb
     {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Core.Application.DTOs.FriendRequest;
@@ -6,11 +7,12 @@ using SocialNetwork.Core.Application.DTOs.Friendship;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.FriendRequest;
 using SocialNetwork.Core.Domain.Enum;
-using SocialNetwork_Infrastructure.Core.Application.Interfaces;
-using SocialNetwork_Infrastructure.Identity.Entities;
+using SocialNetwork.Infrastructure.Core.Application.Interfaces;
+using SocialNetwork.Infrastructure.Identity.Entities;
 
 namespace SocialNetwork.Controllers
 {
+    [Authorize]
     public class FriendRequestController : Controller
     {
         private readonly IFriendRequestService _friendRequestService;
@@ -44,15 +46,30 @@ namespace SocialNetwork.Controllers
             var currentUser = await _accountService.GetUserByUserName(userSession.UserName!);
             var allRequests = await _friendRequestService.GetAllAsync();
 
-            var pendingRequests = allRequests
+            var pendingRequestsEntities = allRequests
                 .Where(r => r.ReceiverId.ToString() == currentUser.Id && r.Status == FriendRequestStatus.Pending)
-                .Select(r => _mapper.Map<FriendRequestViewModel>(r))
                 .ToList();
 
-            var sentRequests = allRequests
-                .Where(r => r.SenderId.ToString() == currentUser.Id)
-                .Select(r => _mapper.Map<FriendRequestViewModel>(r))
-                .ToList();
+            var sentRequestsEntities = allRequests
+                .Where(r => r.SenderId.ToString() == currentUser.Id).ToList();
+
+            var pendingRequests = _mapper.Map<List<FriendRequestViewModel>>(pendingRequestsEntities);
+            var sentRequests = _mapper.Map<List<FriendRequestViewModel>>(sentRequestsEntities);
+
+            var currentUserFriends = await _friendShipService.GetAllFriendsIdAsync(currentUser.Id);
+
+            foreach (var request in pendingRequests)
+            {
+                var senderFriends = await _friendShipService.GetAllFriendsIdAsync(request.SenderId.ToString());
+                request.CommonFriends = currentUserFriends.Intersect(senderFriends).Count();
+            }
+
+           
+            foreach (var request in sentRequests)
+            {
+                var receiverFriends = await _friendShipService.GetAllFriendsIdAsync(request.ReceiverId.ToString());
+                request.CommonFriends = currentUserFriends.Intersect(receiverFriends).Count();
+            }
 
             var viewModel = new FriendRequestIndexViewModel
             {
@@ -93,6 +110,13 @@ namespace SocialNetwork.Controllers
                     Profile = u.Profile
                 })
                 .ToList();
+
+            foreach (var user in availableUsers)
+            {
+                var userFriends = await _friendShipService.GetAllFriendsIdAsync(user.Id!);
+                user.CommonFriends = friends.Intersect(userFriends).Count();
+            }
+
             var viewModel = new CreateFriendRequestViewModel
             {
                 AvailableUsers = availableUsers

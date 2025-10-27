@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SocialNetwork_Infrastructure.Identity.Entities;
+using SocialNetwork.Infrastructure.Identity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SocialNetwork_Infrastructure.Identity.Seed
+namespace SocialNetwork.Infrastructure.Identity.Seed
 {
     public static class DefaultUser
     {

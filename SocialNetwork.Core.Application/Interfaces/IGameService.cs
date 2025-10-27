@@ -10,7 +10,7 @@ namespace SocialNetwork.Core.Application.Interfaces
     public interface IGameService : IGenericService<GameDto>
     {
         Task<bool> StartGameAsync(int gameId);
-        Task<bool> FinishGameAsync(int gameId, int winnerId);
-        Task<bool> SurrenderGameAsync(int gameId, int surrenderingPlayerId);
+        Task<bool> FinishGameAsync(int gameId, string winnerId);
+        Task<bool> SurrenderGameAsync(int gameId, string surrenderingPlayerId);
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using SocialNetwork.Core.Application.Interfaces;
+using SocialNetwork.Core.Application.Services;
+using SocialNetwork.Infrastructure.Core.Application.Interfaces;
+
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SocialNetwork.Core.Application
 {
@@ -13,6 +13,11 @@ namespace SocialNetwork.Core.Application
         public static void AddApplicationServicesIoc(this IServiceCollection services)
         {
             services.AddAutoMapper(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
+            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IReactionService, ReactionService>();
+          
+            
         }
     }
 }

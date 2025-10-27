@@ -1,6 +1,6 @@
 ﻿using SocialNetwork.Core.Application.DTOs.User;
 
-namespace SocialNetwork_Infrastructure.Core.Application.Interfaces
+namespace SocialNetwork.Infrastructure.Core.Application.Interfaces
 {
     public interface IAccountServiceWeb
     {

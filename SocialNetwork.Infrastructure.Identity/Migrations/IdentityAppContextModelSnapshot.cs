@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SocialNetwork_Infrastructure.Identity.Context;
+using SocialNetwork.Infrastructure.Identity.Context;
 
 #nullable disable
 
-namespace SocialNetwork_Infrastructure.Identity.Migrations
+namespace SocialNetwork.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(IdentityAppContext))]
     partial class IdentityAppContextModelSnapshot : ModelSnapshot

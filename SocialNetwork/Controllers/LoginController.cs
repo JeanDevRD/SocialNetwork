@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Core.Application.DTOs.User;
 using SocialNetwork.Core.Application.ViewModels.User;
 using SocialNetwork.Helpers;
-using SocialNetwork_Infrastructure.Identity.Entities;
-using SocialNetwork_Infrastructure.Identity.Services;
-using System.Data;
+using SocialNetwork.Infrastructure.Core.Application.Interfaces;
+using SocialNetwork.Infrastructure.Identity.Entities;
+using SocialNetwork.Infrastructure.Identity.Services;
+
 
 namespace SocialNetwork.Controllers
 {

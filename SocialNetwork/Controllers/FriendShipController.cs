@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.FriendShip;
-using SocialNetwork_Infrastructure.Core.Application.Interfaces;
-using SocialNetwork_Infrastructure.Identity.Entities;
+using SocialNetwork.Infrastructure.Core.Application.Interfaces;
+using SocialNetwork.Infrastructure.Identity.Entities;
 
 namespace SocialNetwork.Controllers
 {
+    [Authorize]
     public class FriendShipController : Controller
     {
         private readonly IFriendShipService _friendShipService;

@@ -3,8 +3,8 @@ using SocialNetwork.Core.Application;
 using SocialNetwork.Infrastructure.Identity;
 using SocialNetwork.Infrastructure.Persistence;
 using SocialNetwork.Infrastructure.Shared;
-using SocialNetwork_Infrastructure.Identity.Entities;
-using SocialNetwork_Infrastructure.Identity.Seed;
+using SocialNetwork.Infrastructure.Identity.Entities;
+using SocialNetwork.Infrastructure.Identity.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 

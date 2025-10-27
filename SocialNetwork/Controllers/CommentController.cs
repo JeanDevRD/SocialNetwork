@@ -6,7 +6,7 @@ using Microsoft.Identity.Client;
 using SocialNetwork.Core.Application.DTOs.Comment;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.Comment;
-using SocialNetwork_Infrastructure.Identity.Entities;
+using SocialNetwork.Infrastructure.Identity.Entities;
 
 namespace SocialNetwork.Controllers
 {

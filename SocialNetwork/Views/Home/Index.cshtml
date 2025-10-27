@@ -1,8 +1,188 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using SocialNetwork.Core.Application.ViewModels.Home
+@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Mis Publicaciones";
+    Layout = "_Layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-lg-8 offset-lg-2">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>Mis Publicaciones</h3>
+                <a asp-controller="Post" asp-action="Create" class="btn btn-primary">
+                    Nueva Publicación
+                </a>
+            </div>
+
+            @if (Model.Posts.Count == 0)
+            {
+                <div class="alert alert-info text-center">
+                    <p class="mb-0">Aún no has creado ninguna publicación.</p>
+                    <a asp-controller="Post" asp-action="Create" class="btn btn-sm btn-primary mt-2">
+                        Crear mi primera publicación
+                    </a>
+                </div>
+            }
+
+            @foreach (var post in Model.Posts)
+            {
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-white">
+                        <div class="d-flex align-items-center">
+                            <img src="~/@post.AuthorProfile" alt="@post.AuthorName"
+                                 class="rounded-circle me-2"
+                                 style="width: 40px; height: 40px; object-fit: cover;">
+                            <div>
+                                <h6 class="mb-0">@post.AuthorName</h6>
+                                <small class="text-muted">@post.Created.ToString("dd/MM/yyyy HH:mm")</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <p class="card-text">@post.Content</p>
+
+                        @if (!string.IsNullOrEmpty(post.ImageUrl))
+                        {
+                            <img src="~/@post.ImageUrl" alt="Imagen de publicación"
+                                 class="img-fluid rounded mb-3"
+                                 style="max-height: 500px; width: 100%; object-fit: cover;">
+                        }
+
+                        @if (!string.IsNullOrEmpty(post.VideoUrl))
+                        {
+                            var videoId = post.VideoUrl.Contains("watch?v=")
+                            ? post.VideoUrl.Split("watch?v=")[1].Split("&")[0]
+                            : post.VideoUrl.Split("/").Last();
+
+                            <div class="ratio ratio-16x9 mb-3">
+                                <iframe src="https://www.youtube.com/embed/@videoId"
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        }
+
+                        <div class="d-flex gap-3 mb-3 border-top pt-3">
+                            <div class="d-flex align-items-center gap-2">
+                                @if (post.CurrentUserLiked)
+                                {
+                                    <form asp-controller="Reaction" asp-action="Delete" asp-route-id="@post.Reactions.First(r => r.UserId == post.AuthorId && r.Type == "Like").Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                            Me gusta (@post.LikesCount)
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-controller="Reaction" asp-action="Create" asp-route-id="@post.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                            Me gusta (@post.LikesCount)
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+
+                            <a asp-controller="Comment" asp-action="Create" asp-route-id="@post.Id"
+                               class="btn btn-sm btn-outline-secondary">
+                                Comentar
+                            </a>
+                        </div>
+
+                        <div class="d-flex gap-2 mb-3">
+                            <a asp-controller="Post" asp-action="Edit" asp-route-id="@post.Id"
+                               class="btn btn-sm btn-warning">
+                                Editar
+                            </a>
+                            <a asp-controller="Post" asp-action="Delete" asp-route-id="@post.Id"
+                               class="btn btn-sm btn-danger">
+                                Eliminar
+                            </a>
+                        </div>
+
+                        @if (post.Comments.Count > 0)
+                        {
+                            <div class="border-top pt-3">
+                                <h6 class="mb-3">Comentarios (@post.Comments.Count)</h6>
+
+                                @foreach (var comment in post.Comments)
+                                {
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-start">
+                                            <img src="~/@comment.AuthorProfile" alt="@comment.AuthorName"
+                                                 class="rounded-circle me-2"
+                                                 style="width: 32px; height: 32px; object-fit: cover;">
+                                            <div class="flex-grow-1">
+                                                <div class="bg-light rounded p-2">
+                                                    <h6 class="mb-1">@comment.AuthorName</h6>
+                                                    <p class="mb-0">@comment.Content</p>
+                                                    <small class="text-muted">@comment.Created.ToString("dd/MM/yyyy HH:mm")</small>
+                                                </div>
+
+                                                <div class="d-flex gap-2 mt-1">
+                                                    <a asp-controller="Comment" asp-action="CreateReply" asp-route-id="@comment.Id"
+                                                       class="btn btn-sm btn-link text-decoration-none p-0">
+                                                        Responder
+                                                    </a>
+
+                                                    @if (comment.AuthorId == post.AuthorId)
+                                                    {
+                                                        <a asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id"
+                                                           class="btn btn-sm btn-link text-decoration-none p-0">
+                                                            Editar
+                                                        </a>
+                                                        <a asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id"
+                                                           class="btn btn-sm btn-link text-decoration-none p-0 text-danger">
+                                                            Eliminar
+                                                        </a>
+                                                    }
+                                                </div>
+
+                                                @if (comment.Replies.Count > 0)
+                                                {
+                                                    <div class="ms-4 mt-2">
+                                                        @foreach (var reply in comment.Replies)
+                                                        {
+                                                            <div class="d-flex align-items-start mb-2">
+                                                                <img src="~/@reply.AuthorProfile" alt="@reply.AuthorName"
+                                                                     class="rounded-circle me-2"
+                                                                     style="width: 28px; height: 28px; object-fit: cover;">
+                                                                <div class="flex-grow-1">
+                                                                    <div class="bg-light rounded p-2">
+                                                                        <h6 class="mb-1 small">@reply.AuthorName</h6>
+                                                                        <p class="mb-0 small">@reply.Content</p>
+                                                                        <small class="text-muted">@reply.Created.ToString("dd/MM/yyyy HH:mm")</small>
+                                                                    </div>
+
+                                                                    @if (reply.AuthorId == post.AuthorId)
+                                                                    {
+                                                                        <div class="d-flex gap-2 mt-1">
+                                                                            <a asp-controller="Comment" asp-action="Edit" asp-route-id="@reply.Id"
+                                                                               class="btn btn-sm btn-link text-decoration-none p-0 small">
+                                                                                Editar
+                                                                            </a>
+                                                                            <a asp-controller="Comment" asp-action="Delete" asp-route-id="@reply.Id"
+                                                                               class="btn btn-sm btn-link text-decoration-none p-0 text-danger small">
+                                                                                Eliminar
+                                                                            </a>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>
