@@ -1,6 +1,4 @@
-﻿
-
-using AutoMapper;
+﻿using AutoMapper;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Domain.Interfaces;
 

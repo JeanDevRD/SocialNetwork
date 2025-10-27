@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Core.Application.DTOs.User;
+using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.User;
 using SocialNetwork.Helpers;
-using SocialNetwork.Infrastructure.Core.Application.Interfaces;
 using SocialNetwork.Infrastructure.Identity.Entities;
 using SocialNetwork.Infrastructure.Identity.Services;
 

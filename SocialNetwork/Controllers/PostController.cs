@@ -6,7 +6,7 @@ using SocialNetwork.Core.Application.DTOs.Post;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.Post;
 using SocialNetwork.Helpers;
-using SocialNetwork_Infrastructure.Identity.Entities;
+using SocialNetwork.Infrastructure.Identity.Entities;
 
 namespace SocialNetwork.Controllers
 {

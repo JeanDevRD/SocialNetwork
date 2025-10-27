@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.Services;
-using SocialNetwork.Infrastructure.Core.Application.Interfaces;
+
 
 using System.Reflection;
 

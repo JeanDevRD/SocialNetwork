@@ -7,7 +7,6 @@ using SocialNetwork.Core.Application.DTOs.Friendship;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.FriendRequest;
 using SocialNetwork.Core.Domain.Enum;
-using SocialNetwork.Infrastructure.Core.Application.Interfaces;
 using SocialNetwork.Infrastructure.Identity.Entities;
 
 namespace SocialNetwork.Controllers

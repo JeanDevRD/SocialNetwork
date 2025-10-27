@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using SocialNetwork.Infrastructure.Core.Application.Interfaces;
+using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Infrastructure.Identity.Context;
 using SocialNetwork.Infrastructure.Identity.Entities;
 using SocialNetwork.Infrastructure.Identity.Seed;
 using SocialNetwork.Infrastructure.Identity.Services;
 using System.Reflection;
+
+
 
 namespace SocialNetwork.Infrastructure.Identity
 {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Core.Application.DTOs.Reaction;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.Reaction;
-using SocialNetwork_Infrastructure.Identity.Entities;
+using SocialNetwork.Infrastructure.Identity.Entities;
 
 namespace SocialNetwork.Controllers
 {

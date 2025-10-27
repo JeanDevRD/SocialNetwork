@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.FriendShip;
-using SocialNetwork.Infrastructure.Core.Application.Interfaces;
 using SocialNetwork.Infrastructure.Identity.Entities;
 
 namespace SocialNetwork.Controllers
