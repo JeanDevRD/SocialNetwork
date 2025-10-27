@@ -9,7 +9,7 @@ namespace SocialNetwork.Core.Application.DTOs.Comment
         public required string Content { get; set; }
         public required DateTime Created { get; set; }
 
-        public required int UserId { get; set; }
+        public required string UserId { get; set; }
         public required int PostId { get; set; }
         public int? ParentCommentId { get; set; }
 

@@ -17,5 +17,15 @@ namespace SocialNetwork.Core.Application.Services
             : base(repository, mapper)
         {
         }
+        public async Task<List<string>> GetAllFriendsIdAsync(string userId)
+        {
+            var allFriendships = await GetAllAsync();
+
+            return allFriendships
+                .Where(f => f.UserId == userId || f.FriendId == userId)
+                .Select(f => f.UserId == userId ? f.FriendId : f.UserId)
+                .Distinct()
+                .ToList();
+        }
     }
 }

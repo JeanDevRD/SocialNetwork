@@ -1,0 +1,35 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.Comment
+@model DeleteCommentViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Comentario";
+}
+
+<div class="col-12 col-md-6 offset-md-3 mt-4">
+    <div class="card border-danger shadow-sm">
+        <div class="card-header bg-danger text-white text-center">
+            <h5>Eliminar comentario</h5>
+        </div>
+
+        <div class="card-body text-center">
+            <p class="fw-semibold">¿Estás seguro de que deseas eliminar este comentario?</p>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <form asp-action="Delete" asp-controller="Comment" method="post">
+                <input type="hidden" asp-for="CommentId" />
+
+                <div class="d-flex justify-content-center gap-2">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

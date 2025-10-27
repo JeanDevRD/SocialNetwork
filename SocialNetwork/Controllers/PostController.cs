@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Core.Application.DTOs.Post;
-using SocialNetwork.Core.Application.DTOs.User;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.Post;
 using SocialNetwork.Helpers;
@@ -45,12 +44,18 @@ namespace SocialNetwork.Controllers
             {
                 return RedirectToRoute(new { controller = "Login", action = "Index" });
             }
-
+            if (vm.ImageUrl != null && !string.IsNullOrEmpty(vm.VideoUrl))
+            {
+                ModelState.AddModelError("", "Solo puedes subir una imagen o un video, no ambos.");
+                return View(vm);
+            }
             if (!ModelState.IsValid)
             {
                 ViewBag.Error = "Error al Crear publicación, los datos son inválidos";
                 return View(vm);
             }
+           
+
             try
             {
                 vm.UserId = userSession.Id;

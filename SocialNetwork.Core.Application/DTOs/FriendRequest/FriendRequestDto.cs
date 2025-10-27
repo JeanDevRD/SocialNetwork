@@ -5,8 +5,8 @@ namespace SocialNetwork.Core.Application.DTOs.FriendRequest
 {
     public class FriendRequestDto : CommonEntityDto<int>
     {
-        public required int SenderId { get; set; }
-        public required int ReceiverId { get; set; }
+        public required string SenderId { get; set; }
+        public required string ReceiverId { get; set; }
         public UserDto? Sender { get; set; }
         public UserDto? Receiver { get; set; }
         public required string Status { get; set; }

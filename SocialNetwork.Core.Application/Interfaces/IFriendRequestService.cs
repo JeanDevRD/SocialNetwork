@@ -9,6 +9,7 @@ namespace SocialNetwork.Core.Application.Interfaces
 {
     public interface IFriendRequestService : IGenericServiceWithStatus<FriendRequestDto>
     {
+        Task<List<string>> GetAllPendingByUserIdAsync(string userId);
 
     }
 }

@@ -7,8 +7,8 @@ namespace SocialNetwork.Core.Application.DTOs.Friendship
     {
         public UserDto? User { get; set; }
         public UserDto? Friend { get; set; }
-        public required int UserId { get; set; }
-        public required int FriendId { get; set; }
+        public required string UserId { get; set; }
+        public required string FriendId { get; set; }
         public required DateTime Created { get; set; }
     }
 }

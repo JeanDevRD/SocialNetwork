@@ -1,8 +1,49 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using SocialNetwork.Core.Application.ViewModels.Post
+@model EditPostViewModel
+@{
+    ViewData["Title"] = "Editar Publicación";
+    Layout = "_LayoutAnonymous";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="col-12 col-md-6 offset-md-3 mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-light text-center">
+            <h5>Editar Publicación</h5>
+        </div>
+        <div class="card-body">
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @ViewBag.Error
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <form asp-action="Edit" method="POST" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Content" class="form-label">Contenido</label>
+                    <textarea asp-for="Content" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ImageUrl" class="form-label">Imagen</label>
+                    <input asp-for="ImageUrl" class="form-control" type="file" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="VideoUrl" class="form-label">Video URL</label>
+                    <input asp-for="VideoUrl" class="form-control" />
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

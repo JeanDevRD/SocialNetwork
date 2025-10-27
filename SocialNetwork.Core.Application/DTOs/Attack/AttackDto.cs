@@ -7,7 +7,7 @@ namespace SocialNetwork.Core.Application.DTOs.Attack
     public class AttackDto : CommonEntityDto<int>
     {
         public required int GameId { get; set; }
-        public required int AttackerId { get; set; }
+        public required string AttackerId { get; set; }
         public GameDto? Game { get; set; }
         public UserDto? Attacker { get; set; }
         public required int Row { get; set; }

@@ -5,6 +5,6 @@ namespace SocialNetwork.Core.Application.Interfaces
 {
     public interface IFriendShipService : IGenericService<FriendShipDto>
     {
-
+        Task<List<string>> GetAllFriendsIdAsync(string userId);
     }
 }

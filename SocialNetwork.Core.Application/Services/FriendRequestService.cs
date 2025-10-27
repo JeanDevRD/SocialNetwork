@@ -41,5 +41,16 @@ namespace SocialNetwork.Core.Application.Services
                 return false;
             }
         }
+        
+        public async Task<List<string>> GetAllPendingByUserIdAsync(string userId)
+        {
+            var allRequests = await GetAllAsync();
+
+            return allRequests
+                .Where(r => r.Status == FriendRequestStatus.Pending && (r.SenderId == userId || r.ReceiverId == userId))
+                .Select(r => r.SenderId == userId ? r.ReceiverId : r.SenderId)
+                .Distinct()
+                .ToList();
+        }
     }
 }
