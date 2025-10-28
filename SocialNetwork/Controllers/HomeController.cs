@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.Home;
-using SocialNetwork.Models;
 using SocialNetwork.Infrastructure.Identity.Entities;
-using System.Diagnostics;
+
 
 namespace SocialNetwork.Controllers
 {

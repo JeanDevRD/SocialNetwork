@@ -49,6 +49,7 @@ namespace SocialNetwork.Controllers
             }
             try
             {
+                vm.Id = 0;
                 vm.UserId = userSession.Id;
                 var commentDto = _autoMapper.Map<CommentDto>(vm);
                 await _commentService.AddAsync(commentDto);

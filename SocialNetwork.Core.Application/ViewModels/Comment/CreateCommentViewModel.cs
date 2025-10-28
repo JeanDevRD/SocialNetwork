@@ -9,7 +9,7 @@ namespace SocialNetwork.Core.Application.ViewModels.Comment
 {
     public class CreateCommentViewModel
     {
-        public required int Id { get; set; }
+        public required int Id { get; set; } = 0;
         [Required(ErrorMessage = "Se requiere contenido")]
         [DataType(DataType.Text)]
         public required string Content { get; set; }

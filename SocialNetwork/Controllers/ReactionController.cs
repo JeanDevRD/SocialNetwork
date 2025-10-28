@@ -87,7 +87,7 @@ namespace SocialNetwork.Controllers
                 var dto = new ReactionDto
                 {
                     Id = 0,
-                    Type = "DisLike",
+                    Type = "Dislike",
                     Created = DateTime.Now,
                     UserId = userSession.Id,
                     PostId = id
