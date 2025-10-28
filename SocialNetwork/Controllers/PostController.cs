@@ -90,7 +90,7 @@ namespace SocialNetwork.Controllers
             }
             catch (Exception ex) 
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine(ex.ToString());     
                 ViewBag.Error = "Ha ocurrido un error inesperado al crear publicación";
                 return View(vm);
             }
@@ -146,7 +146,26 @@ namespace SocialNetwork.Controllers
             try
             {
 
+               var post  = await _postService.GetByIdAsync(vm.Id);
+              
+
                 var postDto = _mapper.Map<PostDto>(vm);
+                postDto.Created = post.Created;
+                postDto.UserId = userSession.Id;
+
+                if (!string.IsNullOrEmpty(vm.VideoUrl))
+                {
+                    postDto.ImageUrl = null;
+                }
+
+                if (vm.ImageUrl != null)
+                {
+                    postDto.ImageUrl = UploadFile.Uploader(vm.ImageUrl, postDto.Id.ToString(), "Posts");
+                    postDto.VideoUrl = null;
+                    await _postService.UpdateAsync(postDto.Id, postDto);
+                    return RedirectToRoute(new { controller = "Home", action = "Index" });
+
+                }
                 await _postService.UpdateAsync(postDto.Id, postDto);
 
                 return RedirectToRoute(new { controller = "Home", action = "Index" });

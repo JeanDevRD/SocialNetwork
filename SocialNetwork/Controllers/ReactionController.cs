@@ -40,7 +40,7 @@ namespace SocialNetwork.Controllers
             }
             try
             {
-                var vm = new ReactionViewModel
+                var dto = new ReactionDto
                 {
                     Id = 0,
                     Type = "Like",
@@ -48,8 +48,51 @@ namespace SocialNetwork.Controllers
                     UserId = userSession.Id,
                     PostId = id
                 };
-                var reactionDto = _mapper.Map<ReactionDto>(vm);
-                var result = _reactionService.AddAsync(reactionDto);
+
+                var result = await _reactionService.AddAsync(dto);
+                if (result != null)
+                {
+                    return RedirectToRoute(new { controller = "home", action = "Index" });
+                }
+                else
+                {
+                    ViewBag.Error = "No se ha podido reaccionar a esta publicación";
+                    return RedirectToRoute(new { controller = "home", action = "Index" });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                ViewBag.Error = "Ha ocurrido un error inesperado al reaccionar a esta publicación";
+                return RedirectToRoute(new { controller = "home", action = "Index" });
+            }
+        }
+
+        public async Task<IActionResult> CreateDisLike(int id)
+        {
+            UserEntity? userSession = await _userManager.GetUserAsync(User);
+
+            if (userSession == null)
+            {
+                return RedirectToRoute(new { controller = "Login", action = "Index" });
+            }
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Error = "Ha ocurrido un error al reaccionar a esta publicación";
+                return RedirectToRoute(new { controller = "home", action = "Index" });
+
+            }
+            try
+            {
+                var dto = new ReactionDto
+                {
+                    Id = 0,
+                    Type = "DisLike",
+                    Created = DateTime.Now,
+                    UserId = userSession.Id,
+                    PostId = id
+                };
+                var result = await _reactionService.AddAsync(dto);
                 if (result != null)
                 {
                     return RedirectToRoute(new { controller = "home", action = "Index" });

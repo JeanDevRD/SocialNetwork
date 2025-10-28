@@ -51,6 +51,8 @@ namespace SocialNetwork.Controllers
 
             var viewModel = new HomeViewModel();
 
+            ViewBag.CurrentUserId = currentUser.Id;
+
             foreach (var post in userPosts)
             {
                 var author = await _userManager.FindByIdAsync(post.UserId);
@@ -77,8 +79,8 @@ namespace SocialNetwork.Controllers
                         Type = r.Type,
                         UserId = r.UserId
                     }).ToList(),
-                    CurrentUserLiked = postReactions.Any(r => r.UserId == currentUser.Id && r.Type == "Like"),
-                    CurrentUserDisliked = postReactions.Any(r => r.UserId == currentUser.Id && r.Type == "Dislike"),
+                    CurrentUserLiked = postReactions.Any(r => r.UserId == currentUser.Id && r.Type == "Like"),  
+                    CurrentUserDisliked = postReactions.Any(r => r.UserId == currentUser.Id && r.Type == "Dislike"),  
                     LikesCount = postReactions.Count(r => r.Type == "Like"),
                     DislikesCount = postReactions.Count(r => r.Type == "Dislike")
                 };

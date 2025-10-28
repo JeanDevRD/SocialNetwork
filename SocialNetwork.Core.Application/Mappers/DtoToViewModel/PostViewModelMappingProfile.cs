@@ -13,11 +13,12 @@ namespace SocialNetwork.Core.Application.Mappers.DtoToViewModel
             CreateMap<CreatePostViewModel, PostDto>()
                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => 0))
                .ForMember(dest => dest.Created, opt => opt.MapFrom(src => DateTime.Now))
-               .ForMember(dest => dest.ImageUrl, opt => opt.Ignore())
+               .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageFile))
                .ReverseMap();
 
             CreateMap<EditPostViewModel, PostDto>()
                 .ForMember(dest => dest.Created, opt => opt.Ignore())
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
                 .ReverseMap();
 
             CreateMap<DeletePostViewModel, PostDto>()

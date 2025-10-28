@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Mis Publicaciones";
     Layout = "_Layout";
+    var currentUserId = ViewBag.CurrentUserId as string;  
 }
 
 <div class="container mt-4">
@@ -12,7 +13,9 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3>Mis Publicaciones</h3>
-                <a asp-controller="Post" asp-action="Create" class="btn btn-primary"> Nueva Publicación</a>
+                <a asp-controller="Post" asp-action="Create" class="btn btn-primary">
+                    Nueva Publicación
+                </a>
             </div>
 
             @if (Model.Posts.Count == 0)
@@ -67,12 +70,16 @@
                             <div class="d-flex align-items-center gap-2">
                                 @if (post.CurrentUserLiked)
                                 {
-                                    <form asp-controller="Reaction" asp-action="Delete" asp-route-id="@post.Reactions.First(r => r.UserId == post.AuthorId && r.Type == "Like").Id" method="post" class="d-inline">
-                                        <button type="submit" class="btn btn-sm btn-outline-primary">
-                                            Me gusta (@post.LikesCount)
-                                        </button>
-                                    </form>
-                                }
+                                    var userReaction = post.Reactions.FirstOrDefault(r => r.UserId == currentUserId && r.Type == "Like");
+                                    @if (userReaction != null)
+                                    {
+                                        <form asp-controller="Reaction" asp-action="Delete" asp-route-id="@userReaction.Id" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-primary">
+                                               Me gusta (@post.LikesCount)
+                                            </button>
+                                        </form>
+                                    }
+                                    }
                                 else
                                 {
                                     <form asp-controller="Reaction" asp-action="Create" asp-route-id="@post.Id" method="post" class="d-inline">
@@ -82,22 +89,37 @@
                                     </form>
                                 }
                             </div>
-
+                            <div class="d-flex align-items-center gap-2">
+                                @if (post.CurrentUserDisliked)
+                                {
+                                    var userReaction = post.Reactions.FirstOrDefault(r => r.UserId == currentUserId && r.Type == "Dislike");
+                                    @if (userReaction != null)
+                                    {
+                                        <form asp-controller="Reaction" asp-action="Delete" asp-route-id="@userReaction.Id" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                              No me gusta (@post.DislikesCount)
+                                            </button>
+                                        </form>
+                                    }
+                                }
+                                else
+                                {
+                                    <form asp-controller="Reaction" asp-action="CreateDislike" asp-route-id="@post.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                              No me gusta (@post.DislikesCount)
+                                        </button>
+                                    </form>
+                                }
+                            </div>
                             <a asp-controller="Comment" asp-action="Create" asp-route-id="@post.Id"
-                               class="btn btn-sm btn-outline-secondary">
-                                Comentar
-                            </a>
+                               class="btn btn-sm btn-outline-secondary"> Comentar </a>
                         </div>
 
                         <div class="d-flex gap-2 mb-3">
                             <a asp-controller="Post" asp-action="Edit" asp-route-id="@post.Id"
-                               class="btn btn-sm btn-warning">
-                                Editar
-                            </a>
+                               class="btn btn-sm btn-warning"> Editar </a>
                             <a asp-controller="Post" asp-action="Delete" asp-route-id="@post.Id"
-                               class="btn btn-sm btn-danger">
-                                Eliminar
-                            </a>
+                               class="btn btn-sm btn-danger"> Eliminar </a>
                         </div>
 
                         @if (post.Comments.Count > 0)
@@ -121,20 +143,15 @@
 
                                                 <div class="d-flex gap-2 mt-1">
                                                     <a asp-controller="Comment" asp-action="CreateReply" asp-route-id="@comment.Id"
-                                                       class="btn btn-sm btn-link text-decoration-none p-0">
-                                                        Responder
-                                                    </a>
+                                                       class="btn btn-sm btn-link text-decoration-none p-0"> Responder </a>
 
-                                                    @if (comment.AuthorId == post.AuthorId)
+                                                    @if (comment.AuthorId == currentUserId)
                                                     {
                                                         <a asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id"
-                                                           class="btn btn-sm btn-link text-decoration-none p-0">
-                                                            Editar
+                                                           class="btn btn-sm btn-link text-decoration-none p-0">Editar
                                                         </a>
                                                         <a asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id"
-                                                           class="btn btn-sm btn-link text-decoration-none p-0 text-danger">
-                                                            Eliminar
-                                                        </a>
+                                                           class="btn btn-sm btn-link text-decoration-none p-0 text-danger">Eliminar</a>
                                                     }
                                                 </div>
 
@@ -154,17 +171,13 @@
                                                                         <small class="text-muted">@reply.Created.ToString("dd/MM/yyyy HH:mm")</small>
                                                                     </div>
 
-                                                                    @if (reply.AuthorId == post.AuthorId)
+                                                                    @if (reply.AuthorId == currentUserId)
                                                                     {
                                                                         <div class="d-flex gap-2 mt-1">
                                                                             <a asp-controller="Comment" asp-action="Edit" asp-route-id="@reply.Id"
-                                                                               class="btn btn-sm btn-link text-decoration-none p-0 small">
-                                                                                Editar
-                                                                            </a>
+                                                                               class="btn btn-sm btn-link text-decoration-none p-0 small">Editar</a>
                                                                             <a asp-controller="Comment" asp-action="Delete" asp-route-id="@reply.Id"
-                                                                               class="btn btn-sm btn-link text-decoration-none p-0 text-danger small">
-                                                                                Eliminar
-                                                                            </a>
+                                                                               class="btn btn-sm btn-link text-decoration-none p-0 text-danger small">Elimina</a>
                                                                         </div>
                                                                     }
                                                                 </div>

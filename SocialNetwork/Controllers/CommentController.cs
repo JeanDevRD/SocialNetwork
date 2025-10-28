@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using SocialNetwork.Core.Application.DTOs.Comment;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.Comment;
