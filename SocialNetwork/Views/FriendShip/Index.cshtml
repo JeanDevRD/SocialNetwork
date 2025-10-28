@@ -41,50 +41,5 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-12 col-lg-8">
-            <div class="card shadow-sm mb-3">
-                <div class="card-header bg-white"><h5 class="mb-0">Publicaciones de Amigos</h5></div>
-            </div>
-
-            @if (Model.FriendPosts.Count == 0)
-            {
-                <div class="alert alert-info text-center"><p class="mb-0">No hay publicaciones de tus amigos</p></div>
-            }
-
-            @foreach (var post in Model.FriendPosts)
-            {
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-white">
-                        <div class="d-flex align-items-center">
-                            <img src="~/@post.AuthorProfile" alt="@post.AuthorName" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;" />
-                            <div>
-                                <h6 class="mb-0">
-                                    <a asp-controller="FriendShip" asp-action="UserPosts" asp-route-userId="@post.AuthorId" class="text-decoration-none">@post.AuthorName</a>
-                                </h6>
-                                <small class="text-muted">@post.Created.ToString("dd/MM/yyyy HH:mm")</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <p class="card-text">@post.Content</p>
-
-                        @if (!string.IsNullOrEmpty(post.ImageUrl))
-                        {
-                            <img src="~/@post.ImageUrl" alt="Imagen de publicación" class="img-fluid rounded mb-3" style="max-height: 500px; width: 100%; object-fit: cover;" />
-                        }
-
-                        @if (!string.IsNullOrEmpty(post.VideoUrl))
-                        {
-                            var videoId = post.VideoUrl.Contains("watch?v=") ? post.VideoUrl.Split("watch?v=")[1].Split("&")[0] : post.VideoUrl.Split("/").Last();
-                            <div class="ratio ratio-16x9 mb-3">
-                                <iframe src="https://www.youtube.com/embed/@videoId" allowfullscreen></iframe>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
     </div>
 </div>
