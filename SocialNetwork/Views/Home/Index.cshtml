@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Mis Publicaciones";
     Layout = "_Layout";
-    var currentUserId = ViewBag.CurrentUserId as string;  
+    var currentUserId = ViewBag.CurrentUserId;  
 }
 
 <div class="container mt-4">
@@ -13,18 +13,14 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3>Mis Publicaciones</h3>
-                <a asp-controller="Post" asp-action="Create" class="btn btn-primary">
-                    Nueva Publicación
-                </a>
+                <a asp-controller="Post" asp-action="Create" class="btn btn-primary"> Nueva Publicación </a>
             </div>
 
             @if (Model.Posts.Count == 0)
             {
                 <div class="alert alert-info text-center">
                     <p class="mb-0">Aún no has creado ninguna publicación.</p>
-                    <a asp-controller="Post" asp-action="Create" class="btn btn-sm btn-primary mt-2">
-                        Crear mi primera publicación
-                    </a>
+                    <a asp-controller="Post" asp-action="Create" class="btn btn-sm btn-primary mt-2"> Crear mi primera publicación </a>
                 </div>
             }
 
@@ -33,8 +29,7 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header bg-white">
                         <div class="d-flex align-items-center">
-                            <img src="~/@post.AuthorProfile" alt="@post.AuthorName"
-                                 class="rounded-circle me-2"
+                            <img src="~/@post.AuthorProfile" alt="@post.AuthorName" class="rounded-circle me-2"
                                  style="width: 40px; height: 40px; object-fit: cover;">
                             <div>
                                 <h6 class="mb-0">@post.AuthorName</h6>
