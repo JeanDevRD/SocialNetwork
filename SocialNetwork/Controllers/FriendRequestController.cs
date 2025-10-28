@@ -20,12 +20,8 @@ namespace SocialNetwork.Controllers
         private readonly UserManager<UserEntity> _userManager;
         private readonly IMapper _mapper;
 
-        public FriendRequestController(
-            IFriendRequestService friendRequestService,
-            IFriendShipService friendShipService,
-            IAccountServiceWeb accountService,
-            UserManager<UserEntity> userManager,
-            IMapper mapper)
+        public FriendRequestController( IFriendRequestService friendRequestService, IFriendShipService friendShipService, 
+            IAccountServiceWeb accountService, UserManager<UserEntity> userManager, IMapper mapper)
         {
             _friendRequestService = friendRequestService;
             _friendShipService = friendShipService;

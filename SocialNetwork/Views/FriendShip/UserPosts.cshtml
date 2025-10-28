@@ -1,70 +1,43 @@
 ﻿@using SocialNetwork.Core.Application.ViewModels.FriendShip
-@model FriendsIndexViewModel
+@using SocialNetwork.Core.Application.ViewModels.Home
+@model UserPostsViewModel
 
 @{
-    ViewData["Title"] = "Mis Amigos";
+    ViewData["Title"] = $"Publicaciones de {Model.UserName}";
     Layout = "_Layout";
-    var currentUserId = ViewBag.CurrentUserId as string;
+    var currentUserId = ViewBag.CurrentUserId;
 }
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-12 col-lg-4 mb-4">
-            <div class="card shadow-sm sticky-top" style="top: 20px;">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Mis Amigos (@Model.Friends.Count)</h5>
+        <div class="col-12 col-lg-8 offset-lg-2">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center">
+                    <img src="~/@Model.UserProfile" alt="@Model.UserName" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                    <div>
+                        <h3 class="mb-0">@Model.UserName</h3>
+                        <small class="text-muted">@Model.Posts.Count publicaciones</small>
+                    </div>
                 </div>
-                <div class="card-body" style="max-height: 600px; overflow-y: auto;">
-                    @if (Model.Friends.Count == 0)
-                    {
-                        <p class="text-muted text-center">Aún no tienes amigos</p>
-                        <a asp-controller="FriendRequest" asp-action="Create" class="btn btn-sm btn-primary w-100">Buscar Amigos</a>
-                    }
-                    else
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var friend in Model.Friends)
-                            {
-                                <div class="list-group-item px-0">
-                                    <div class="d-flex align-items-center">
-                                        <img src="~/@friend.Profile" alt="@friend.Username" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;" />
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-0">@friend.Username</h6>
-                                            <small class="text-muted">@friend.FirstName @friend.LastName</small>
-                                        </div>
-                                    </div>
-                                    <div class="mt-2">
-                                        <a asp-controller="FriendShip" asp-action="UserPosts" asp-route-userId="@friend.Id" class="btn btn-sm btn-outline-primary me-2">Ver Posts</a>
-                                        <a asp-controller="FriendShip" asp-action="Delete" asp-route-id="@friend.Id" class="btn btn-sm btn-outline-danger">Eliminar</a>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                </div>
+                <a asp-controller="FriendShip" asp-action="Index" class="btn btn-outline-secondary">Volver a Amigos</a>
             </div>
-        </div>
 
-        <div class="col-12 col-lg-8">
-            <h3 class="mb-4">Publicaciones de Amigos</h3>
-
-            @if (Model.FriendPosts.Count == 0)
+            @if (Model.Posts.Count == 0)
             {
-                <div class="alert alert-info text-center"><p class="mb-0">Aún no hay publicaciones de tus amigos</p></div>
+              <div class="alert alert-info text-center">
+                  <p class="mb-0">Este usuario aún no ha publicado nada</p>
+              </div>
             }
-
-            @foreach (var post in Model.FriendPosts)
+            @foreach (var post in Model.Posts)
             {
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header bg-white">
                         <div class="d-flex align-items-center">
-                            <img src="~/@post.AuthorProfile" alt="@post.AuthorName" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;" />
+                           <img src="~/@post.AuthorProfile" alt="@post.AuthorName" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;" />
                             <div>
-                                <h6 class="mb-0">
-                                    <a asp-controller="FriendShip" asp-action="UserPosts" asp-route-userId="@post.AuthorId" class="text-decoration-none">@post.AuthorName</a>
-                                </h6>
-                                <small class="text-muted">@post.Created.ToString("dd/MM/yyyy HH:mm")</small>
-                            </div>
+                              <h6 class="mb-0">@post.AuthorName</h6>
+                              <small class="text-muted">@post.Created.ToString("dd/MM/yyyy HH:mm")</small>
+                           </div>
                         </div>
                     </div>
 
@@ -73,29 +46,85 @@
 
                         @if (!string.IsNullOrEmpty(post.ImageUrl))
                         {
-                            <img src="~/@post.ImageUrl" alt="Imagen de publicación" class="img-fluid rounded mb-3" style="max-height: 500px; width: 100%; object-fit: cover;" />
+                          <img src="~/@post.ImageUrl" alt="Imagen de publicación" class="img-fluid rounded mb-3" style="max-height: 500px; width: 100%; object-fit: cover;" />
                         }
 
                         @if (!string.IsNullOrEmpty(post.VideoUrl))
                         {
-                            var videoId = post.VideoUrl.Contains("watch?v=")
-                            ? post.VideoUrl.Split("watch?v=")[1].Split("&")[0]
-                            : post.VideoUrl.Split("/").Last();
+                          var videoId = post.VideoUrl.Contains("watch?v=")
+                          ? post.VideoUrl.Split("watch?v=")[1].Split("&")[0]
+                          : post.VideoUrl.Split("/").Last();
 
-                            <div class="ratio ratio-16x9 mb-3">
-                                <iframe src="https://www.youtube.com/embed/@videoId" allowfullscreen></iframe>
-                            </div>
+                          <div class="ratio ratio-16x9 mb-3">
+                              <iframe src="https://www.youtube.com/embed/@videoId" allowfullscreen></iframe>
+                          </div>
                         }
 
                         <div class="d-flex gap-3 mb-3 border-top pt-3">
                             <form asp-controller="Reaction" asp-action="Create" asp-route-id="@post.Id" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-sm btn-outline-secondary">Me gusta</button>
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">Me gusta (@post.LikesCount)</button>
                             </form>
                             <form asp-controller="Reaction" asp-action="CreateDislike" asp-route-id="@post.Id" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-sm btn-outline-danger">No me gusta</button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger">No me gusta (@post.DislikesCount)</button>
                             </form>
-                            <a asp-controller="Comment" asp-action="Create" asp-route-id="@post.Id" class="btn btn-sm btn-outline-secondary">Comentar</a>
+                            <a asp-controller="Comment" asp-action="Create" asp-route-id="@post.Id" class="btn btn-sm btn-outline-secondary">Comentar (@post.CommentsCount)</a>
                         </div>
+
+                        @if (post.Comments != null && post.Comments.Count > 0)
+                        {
+                            <div class="border-top pt-3">
+                                <h6 class="mb-3">Comentarios (@post.CommentsCount)</h6>
+                                @foreach (var comment in post.Comments)
+                                {
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-start">
+                                            <img src="~/@comment.AuthorProfile" alt="@comment.AuthorName" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                                            <div class="flex-grow-1">
+                                                <div class="bg-light rounded p-2">
+                                                    <h6 class="mb-1">@comment.AuthorName</h6>
+                                                    <p class="mb-0">@comment.Content</p>
+                                                    <small class="text-muted">@comment.Created.ToString("dd/MM/yyyy HH:mm")</small>
+                                                </div>
+                                                <div class="d-flex gap-2 mt-1">
+                                                    <a asp-controller="Comment" asp-action="CreateReply" asp-route-id="@comment.Id" class="btn btn-sm btn-link text-decoration-none p-0">Responder</a>
+                                                    @if (comment.AuthorId == currentUserId)
+                                                    {
+                                                      <a asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id" class="btn btn-sm btn-link text-decoration-none p-0">Editar</a>
+                                                      <a asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id" class="btn btn-sm btn-link text-decoration-none p-0 text-danger">Eliminar</a>
+                                                    }
+                                                </div>
+
+                                                @if (comment.Replies != null && comment.Replies.Count > 0)
+                                                {
+                                                    <div class="ms-4 mt-2">
+                                                        @foreach (var reply in comment.Replies)
+                                                        {
+                                                        <div class="d-flex align-items-start mb-2">
+                                                            <img src="~/@reply.AuthorProfile" alt="@reply.AuthorName" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover;">
+                                                            <div class="flex-grow-1">
+                                                             <div class="bg-light rounded p-2">
+                                                                 <h6 class="mb-1 small">@reply.AuthorName</h6>
+                                                                 <p class="mb-0 small">@reply.Content</p>
+                                                                 <small class="text-muted">@reply.Created.ToString("dd/MM/yyyy HH:mm")</small>
+                                                             </div>
+                                                             @if (reply.AuthorId == currentUserId)
+                                                             {
+                                                              <div class="d-flex gap-2 mt-1">
+                                                                <a asp-controller="Comment" asp-action="Edit" asp-route-id="@reply.Id" class="btn btn-sm btn-link text-decoration-none p-0 small">Editar</a>
+                                                                <a asp-controller="Comment" asp-action="Delete" asp-route-id="@reply.Id" class="btn btn-sm btn-link text-decoration-none p-0 text-danger small">Eliminar</a>
+                                                              </div>
+                                                             }
+                                                             </div>
+                                                        </div>
+                                                     }
+                                                 </div>
+                                                }
+                                            </div>
+                                        </div>
+                                   </div>
+                                }
+                           </div>
+                        }
                     </div>
                 </div>
             }

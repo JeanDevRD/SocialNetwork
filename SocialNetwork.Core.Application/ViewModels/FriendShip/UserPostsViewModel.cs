@@ -12,5 +12,6 @@ namespace SocialNetwork.Core.Application.ViewModels.FriendShip
         public string UserName { get; set; } = string.Empty;
         public string UserProfile { get; set; } = string.Empty;
         public List<FriendPostViewModel> Posts { get; set; } = new();
+
     }
 }

@@ -17,12 +17,8 @@ namespace SocialNetwork.Controllers
         private readonly IAccountServiceWeb _accountService;
         private readonly UserManager<UserEntity> _userManager;
 
-        public HomeController(
-            IPostService postService,
-            ICommentService commentService,
-            IReactionService reactionService,
-            IAccountServiceWeb accountService,
-            UserManager<UserEntity> userManager)
+        public HomeController(IPostService postService, ICommentService commentService,IReactionService reactionService,
+            IAccountServiceWeb accountService, UserManager<UserEntity> userManager)
         {
             _postService = postService;
             _commentService = commentService;

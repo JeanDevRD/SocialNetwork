@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Core.Application.Interfaces;
+using SocialNetwork.Core.Application.Services;
 using SocialNetwork.Core.Application.ViewModels.FriendShip;
+using SocialNetwork.Core.Application.ViewModels.Home;
 using SocialNetwork.Infrastructure.Identity.Entities;
 
 namespace SocialNetwork.Controllers
@@ -16,19 +18,19 @@ namespace SocialNetwork.Controllers
         private readonly IAccountServiceWeb _accountService;
         private readonly UserManager<UserEntity> _userManager;
         private readonly IMapper _mapper;
+        private readonly ICommentService _commentService;
+        private readonly IReactionService _reactionService;
 
-        public FriendShipController(
-            IFriendShipService friendShipService,
-            IPostService postService,
-            IAccountServiceWeb accountService,
-            UserManager<UserEntity> userManager,
-            IMapper mapper)
+        public FriendShipController( IFriendShipService friendShipService, IPostService postService, IAccountServiceWeb accountService,
+            UserManager<UserEntity> userManager, IMapper mapper, ICommentService comment,IReactionService reaction)
         {
             _friendShipService = friendShipService;
             _postService = postService;
             _accountService = accountService;
             _userManager = userManager;
             _mapper = mapper;
+            _commentService = comment;
+            _reactionService = reaction;
         }
 
         public async Task<IActionResult> Index()
@@ -93,23 +95,83 @@ namespace SocialNetwork.Controllers
                 return RedirectToRoute(new { controller = "Login", action = "Index" });
             }
 
+            var currentUser = await _accountService.GetUserByUserName(userSession.UserName!);
             var user = await _userManager.FindByIdAsync(userId);
+
             if (user == null)
-                return RedirectToRoute(new { controller = "Friends", action = "Index" });
+                return RedirectToRoute(new { controller = "FriendShip", action = "Index" });
 
             var allPosts = await _postService.GetAllAsync();
+            var allComments = await _commentService.GetAllAsync();
+            var allReactions = await _reactionService.GetAllAsync();
 
             var userPosts = allPosts.Where(p => p.UserId == userId)
                 .OrderByDescending(p => p.Created)
-                .Select(p => _mapper.Map<FriendPostViewModel>(p))
                 .ToList();
+
+            var postDetails = new List<FriendPostViewModel>();
+
+            foreach (var post in userPosts)
+            {
+                var postComments = allComments.Where(c => c.PostId == post.Id && c.ParentCommentId == null)
+                    .OrderBy(c => c.Created).ToList();
+                var postReactions = allReactions.Where(r => r.PostId == post.Id).ToList();
+
+                var friendPost = _mapper.Map<FriendPostViewModel>(post);
+
+                friendPost.CommentsCount = allComments.Count(c => c.PostId == post.Id);
+                friendPost.LikesCount = postReactions.Count(r => r.Type == "Like");
+                friendPost.DislikesCount = postReactions.Count(r => r.Type == "Dislike");
+
+                friendPost.Comments = new List<CommentDetailViewModel>();
+
+                foreach (var comment in postComments)
+                {
+                    var commentAuthor = await _userManager.FindByIdAsync(comment.UserId);
+                    var commentDetail = new CommentDetailViewModel
+                    {
+                        Id = comment.Id,
+                        Content = comment.Content,
+                        Created = comment.Created,
+                        AuthorId = comment.UserId,
+                        AuthorName = commentAuthor?.UserName ?? "Usuario",
+                        AuthorProfile = commentAuthor?.Profile ?? "Images/default_profile.png",
+                        ParentCommentId = comment.ParentCommentId,
+                        Replies = new List<CommentDetailViewModel>()
+                    };
+
+                    var replies = allComments.Where(c => c.ParentCommentId == comment.Id).OrderBy(c => c.Created).ToList();
+
+                    foreach (var reply in replies)
+                    {
+                        var replyAuthor = await _userManager.FindByIdAsync(reply.UserId);
+                        commentDetail.Replies.Add(new CommentDetailViewModel
+                        {
+                            Id = reply.Id,
+                            Content = reply.Content,
+                            Created = reply.Created,
+                            AuthorId = reply.UserId,
+                            AuthorName = replyAuthor?.UserName ?? "Usuario",
+                            AuthorProfile = replyAuthor?.Profile ?? "Images/default_profile.png",
+                            ParentCommentId = reply.ParentCommentId,
+                            Replies = new List<CommentDetailViewModel>()
+                        });
+                    }
+
+                    friendPost.Comments.Add(commentDetail);
+                }
+
+                postDetails.Add(friendPost);
+            }
+
+            ViewBag.CurrentUserId = currentUser.Id;
 
             var viewModel = new UserPostsViewModel
             {
                 UserId = userId,
-                UserName = user.UserName,
+                UserName = user.UserName ?? "",
                 UserProfile = user.Profile,
-                Posts = userPosts
+                Posts = postDetails
             };
 
             return View(viewModel);
