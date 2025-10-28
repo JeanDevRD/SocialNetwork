@@ -9,10 +9,10 @@ namespace SocialNetwork.Core.Application.ViewModels.FriendRequest
     public class FriendRequestViewModel
     {
         public int Id { get; set; }
-        public int SenderId { get; set; }
+        public string? SenderId { get; set; }
         public string? SenderUserName { get; set; } 
         public string? SenderProfile { get; set; } 
-        public int ReceiverId { get; set; }
+        public string? ReceiverId { get; set; }
         public string? ReceiverUserName { get; set; } 
         public string? ReceiverProfile { get; set; } 
         public string? Status { get; set; } 

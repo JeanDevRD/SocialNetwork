@@ -1,0 +1,104 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.FriendRequest
+@model FriendRequestIndexViewModel
+
+@{
+    ViewData["Title"] = "Solicitudes de Amistad";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>Solicitudes de Amistad</h3>
+                <a asp-controller="FriendRequest" asp-action="Create" class="btn btn-primary">Enviar Solicitud</a>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Solicitudes Recibidas (@Model.PendingRequests.Count)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.PendingRequests.Count == 0)
+                    {
+                        <p class="text-muted text-center mb-0">No tienes solicitudes pendientes</p>
+                    }
+                    else
+                    {
+                        <div class="list-group">
+                            @foreach (var request in Model.PendingRequests)
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img src="~/@request.SenderProfile" alt="@request.SenderUserName" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+                                            <div>
+                                                <h6 class="mb-1">@request.SenderUserName</h6>
+                                                <small class="text-muted d-block">@request.CommonFriends amigos en común</small>
+                                                <small class="text-muted">@request.RequestedAt.ToString("dd/MM/yyyy")</small>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <a asp-controller="FriendRequest" asp-action="Accept" asp-route-id="@request.Id" class="btn btn-sm btn-success me-2">Aceptar</a>
+                                            <a asp-controller="FriendRequest" asp-action="Reject" asp-route-id="@request.Id" class="btn btn-sm btn-danger">Rechazar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Solicitudes Enviadas (@Model.SentRequests.Count)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.SentRequests.Count == 0)
+                    {
+                        <p class="text-muted text-center mb-0">No has enviado solicitudes</p>
+                    }
+                    else
+                    {
+                        <div class="list-group">
+                            @foreach (var request in Model.SentRequests)
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img src="~/@request.ReceiverProfile" alt="@request.ReceiverUserName" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;" />
+                                            <div>
+                                                <h6 class="mb-1">@request.ReceiverUserName</h6>
+                                                <small class="text-muted d-block">@request.CommonFriends amigos en común</small>
+                                                <small class="text-muted">
+                                                    Estado:
+                                                    @if (request.Status == "Pending")
+                                                    {
+                                                        <span class="badge bg-warning">Pendiente</span>
+                                                    }
+                                                    else if (request.Status == "Accepted")
+                                                    {
+                                                        <span class="badge bg-success">Aceptada</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-danger">Rechazada</span>
+                                                    }
+                                                </small>
+                                            </div>
+                                        </div>
+                                        @if (request.Status == "Pending")
+                                        {
+                                            <a asp-controller="FriendRequest" asp-action="Delete" asp-route-id="@request.Id" class="btn btn-sm btn-outline-danger">Cancelar</a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

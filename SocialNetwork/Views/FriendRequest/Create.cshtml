@@ -1,0 +1,68 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.FriendRequest
+@model CreateFriendRequestViewModel
+
+@{
+    ViewData["Title"] = "Enviar Solicitud de Amistad";
+}
+
+<div class="col-12 col-md-8 offset-md-2 mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white text-center">
+            <h5>Enviar Solicitud de Amistad</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.AvailableUsers.Count == 0)
+            {
+                <div class="alert alert-info text-center">
+                    <p class="mb-0">No hay usuarios disponibles para enviar solicitud</p>
+                    <a asp-controller="FriendRequest" asp-action="Index" class="btn btn-sm btn-primary mt-2"> Volver </a>
+                </div>
+            }
+            else
+            {
+                <form asp-action="Create" method="post">
+                    <div class="mb-3">
+                        <label for="SelectedUserId" class="form-label fw-semibold"> Selecciona un usuario </label>
+                        <select asp-for="SelectedUserId" class="form-select">
+                            <option value="">-- Selecciona un usuario --</option>
+                            @foreach (var user in Model.AvailableUsers.OrderByDescending(u => u.CommonFriends))
+                            {
+                                <option value="@user.Id">
+                                    @user.Username - @user.CommonFriends amigos en común
+                                </option>
+                            }
+                        </select>
+                        <span asp-validation-for="SelectedUserId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6 class="mb-3">Usuarios sugeridos:</h6>
+                        <div class="list-group">
+                            @foreach (var user in Model.AvailableUsers.OrderByDescending(u => u.CommonFriends).Take(5))
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <img src="~/@user.Profile" alt="@user.Username"
+                                             class="rounded-circle me-3"
+                                             style="width: 50px; height: 50px; object-fit: cover;">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">@user.Username</h6>
+                                            <small class="text-muted">
+                                                @user.CommonFriends amigos en común
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-controller="FriendRequest" asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>

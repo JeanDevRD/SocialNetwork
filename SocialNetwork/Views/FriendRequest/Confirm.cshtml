@@ -1,0 +1,30 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.FriendRequest
+@model ConfirmActionViewModel
+
+@{
+    ViewData["Title"] = "Confirmar Acción";
+    var actionClass = Model.Action == "Accept" ? "success" : "danger";
+    var actionText = Model.Action == "Accept" ? "Aceptar" :
+                     Model.Action == "Reject" ? "Rechazar" : "Cancelar";
+}
+
+<div class="col-12 col-md-6 offset-md-3 mt-4">
+    <div class="card border-@actionClass shadow-sm">
+        <div class="card-header bg-@actionClass text-white text-center">
+            <h5>@actionText Solicitud</h5>
+        </div>
+        <div class="card-body text-center">
+            <p class="fw-semibold mb-4">@Model.Message</p>
+
+            <form asp-action="@Model.Action" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" name="confirm" value="true" />
+
+                <div class="d-flex justify-content-center gap-2">
+                    <a asp-controller="FriendRequest" asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-@actionClass"> Confirmar </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

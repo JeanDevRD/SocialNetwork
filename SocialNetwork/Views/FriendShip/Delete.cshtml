@@ -1,0 +1,24 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.FriendShip
+@model DeleteFriendViewModel
+
+@{
+    ViewData["Title"] = "Eliminar Amigo";
+}
+
+<div class="col-12 col-md-6 offset-md-3 mt-4">
+    <div class="card border-danger shadow-sm">
+        <div class="card-header bg-danger text-white text-center">
+            <h5>Eliminar Amigo</h5>
+        </div>
+        <div class="card-body text-center">
+            <p class="fw-semibold mb-4"> ¿Estás seguro de que deseas eliminar a <strong>@Model.FriendName</strong> de tu lista de amigos? </p>
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="FriendShipId" />
+                <div class="d-flex justify-content-center gap-2">
+                    <a asp-controller="FriendShip" asp-action="Index" class="btn btn-outline-secondary"> Cancelar </a>
+                    <button type="submit" class="btn btn-danger"> Eliminar </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
