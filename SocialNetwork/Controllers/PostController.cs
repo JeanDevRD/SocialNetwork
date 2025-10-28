@@ -32,7 +32,7 @@ namespace SocialNetwork.Controllers
             }
 
             return View(new CreatePostViewModel { Id = 0, Content = "", Created = DateTime.Now,
-                UserId = "", ImageUrl = null, VideoUrl = "" });
+                UserId = "", VideoUrl = "" });
         }
 
         [HttpPost]
@@ -44,7 +44,7 @@ namespace SocialNetwork.Controllers
             {
                 return RedirectToRoute(new { controller = "Login", action = "Index" });
             }
-            if (vm.ImageUrl != null && !string.IsNullOrEmpty(vm.VideoUrl))
+            if (vm.ImageFile != null && !string.IsNullOrEmpty(vm.VideoUrl))
             {
                 ModelState.AddModelError("", "Solo puedes subir una imagen o un video, no ambos.");
                 return View(vm);
@@ -54,6 +54,8 @@ namespace SocialNetwork.Controllers
                 ViewBag.Error = "Error al Crear publicación, los datos son inválidos";
                 return View(vm);
             }
+
+            vm.UserId = userSession.Id;
 
             if (!string.IsNullOrEmpty(vm.VideoUrl))
             {
@@ -68,11 +70,16 @@ namespace SocialNetwork.Controllers
                 vm.UserId = userSession.Id;
 
                 var postDto = _mapper.Map<PostDto>(vm);
+                if (!string.IsNullOrEmpty(vm.VideoUrl))
+                {
+                    postDto.ImageUrl = null;
+                }
                 await _postService.AddAsync(postDto);
 
-                if (vm.ImageUrl != null) 
+                if (vm.ImageFile != null) 
                 {
-                    postDto.ImageUrl = UploadFile.Uploader(vm.ImageUrl, postDto.Id.ToString(), "Posts");
+                    postDto.ImageUrl = UploadFile.Uploader(vm.ImageFile, postDto.Id.ToString(), "Posts");
+                    postDto.VideoUrl = null;
                     await _postService.UpdateAsync(postDto.Id,postDto);
                     return RedirectToRoute(new { controller = "Home", action = "Index" });
 
@@ -138,6 +145,7 @@ namespace SocialNetwork.Controllers
 
             try
             {
+
                 var postDto = _mapper.Map<PostDto>(vm);
                 await _postService.UpdateAsync(postDto.Id, postDto);
 

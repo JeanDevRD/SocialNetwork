@@ -7,7 +7,8 @@ namespace SocialNetwork.Core.Application.Mappers.EntityToDto
     {
         public FriendShipDtoMappingProfile()
         {
-            CreateMap<FriendShip, FriendShipDto>();
+            CreateMap<FriendShip, FriendShipDto>()
+                .ReverseMap();
         }
     }
 }

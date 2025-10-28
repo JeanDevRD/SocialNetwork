@@ -16,8 +16,12 @@ namespace SocialNetwork.Core.Application
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IReactionService, ReactionService>();
-          
-            
+            services.AddScoped<IAttackService, AttackService>();
+            services.AddScoped<IFriendRequestService, FriendRequestService>();
+            services.AddScoped<IFriendShipService, FriendshipService>();
+            services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IShipService, ShipService>();
+
         }
     }
 }

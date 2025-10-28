@@ -7,7 +7,8 @@ namespace SocialNetwork.Core.Application.Mappers.EntityToDto
     {
         public PostDtoMappingProfile()
         {
-            CreateMap<Post, PostDto>();
+            CreateMap<Post, PostDto>()
+                .ReverseMap();
         }
     }
 }

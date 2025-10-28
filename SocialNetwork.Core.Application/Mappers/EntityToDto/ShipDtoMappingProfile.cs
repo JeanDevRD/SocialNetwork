@@ -8,7 +8,8 @@ namespace SocialNetwork.Core.Application.Mappers.EntityToDto
     {
         public ShipDtoMappingProfile() 
         { 
-         CreateMap<Ship, ShipDto>();
+         CreateMap<Ship, ShipDto>()
+                .ReverseMap();
         }
     }
 }

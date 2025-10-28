@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SocialNetwork.Core.Domain.Interfaces;
 using SocialNetwork.Infrastructure.Persistence.Context;
-using Microsoft.EntityFrameworkCore;
+using SocialNetwork.Infrastructure.Persistence.Repositories;
 
 namespace SocialNetwork.Infrastructure.Persistence
 {
@@ -26,6 +28,16 @@ namespace SocialNetwork.Infrastructure.Persistence
             );
 
             services.AddTransient<DbContext, SocialNetworkDbContext>();
+
+            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddTransient<IPostRepository, PostRepository>();
+            services.AddTransient<ICommentRepository, CommentRepository>();
+            services.AddTransient<IReactionRepository, ReactionRepository>();
+            services.AddTransient<IAttackRepository, AttackRepository>();
+            services.AddTransient<IFriendRequestRepository, FriendRequestRepository>();
+            services.AddTransient<IFriendshipRepository, FriendShipRepository>();
+            services.AddTransient<IGameRepository, GameRepository>();
+            services.AddTransient<IShipRepository, ShipRepository>();
         }
 
         

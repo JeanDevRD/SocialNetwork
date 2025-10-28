@@ -8,7 +8,8 @@ namespace SocialNetwork.Core.Application.Mappers.EntityToDto
     {
         public CommentDtoMappingProfile()
         {
-            CreateMap<Comment, CommentDto>();
+            CreateMap<Comment, CommentDto>()
+                .ReverseMap();
         }
     }
 }

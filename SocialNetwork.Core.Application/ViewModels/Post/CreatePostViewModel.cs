@@ -17,9 +17,9 @@ namespace SocialNetwork.Core.Application.ViewModels.Post
         [Required(ErrorMessage = "Se requiere contenido")]
         [DataType(DataType.Text)]
         public required string Content { get; set; }
-        public IFormFile? ImageUrl { get; set; }
+        public IFormFile? ImageFile { get; set; }
         public string? VideoUrl { get; set; }
         public required DateTime Created { get; set; }
-        public required string UserId { get; set; }
+        public string? UserId { get; set; }
     }
 }

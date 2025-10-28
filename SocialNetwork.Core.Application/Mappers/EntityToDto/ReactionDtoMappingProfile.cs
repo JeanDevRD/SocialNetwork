@@ -8,7 +8,8 @@ namespace SocialNetwork.Core.Application.Mappers.EntityToDto
     {
         public ReactionDtoMappingProfile()
         {
-            CreateMap<Reaction,ReactionDto>();
+            CreateMap<Reaction,ReactionDto>()
+                .ReverseMap();
         } 
     }
 }

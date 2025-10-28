@@ -8,7 +8,8 @@ namespace SocialNetwork.Core.Application.Mappers.EntityToDto
     {
         public FriendRequestMappingProfile()
         {
-            CreateMap<FriendRequest, FriendRequestDto>();
+            CreateMap<FriendRequest, FriendRequestDto>()
+                .ReverseMap();
         }
     }
 }
