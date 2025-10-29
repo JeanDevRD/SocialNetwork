@@ -69,18 +69,14 @@
                                     @if (userReaction != null)
                                     {
                                         <form asp-controller="Reaction" asp-action="Delete" asp-route-id="@userReaction.Id" method="post" class="d-inline">
-                                            <button type="submit" class="btn btn-sm btn-primary">
-                                               Me gusta (@post.LikesCount)
-                                            </button>
+                                            <button type="submit" class="btn btn-sm btn-primary"> Me gusta (@post.LikesCount) </button>
                                         </form>
                                     }
-                                    }
+                                }
                                 else
                                 {
                                     <form asp-controller="Reaction" asp-action="Create" asp-route-id="@post.Id" method="post" class="d-inline">
-                                        <button type="submit" class="btn btn-sm btn-outline-secondary">
-                                            Me gusta (@post.LikesCount)
-                                        </button>
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary"> Me gusta (@post.LikesCount) </button>
                                     </form>
                                 }
                             </div>
@@ -91,18 +87,14 @@
                                     @if (userReaction != null)
                                     {
                                         <form asp-controller="Reaction" asp-action="Delete" asp-route-id="@userReaction.Id" method="post" class="d-inline">
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                              No me gusta (@post.DislikesCount)
-                                            </button>
+                                            <button type="submit" class="btn btn-sm btn-danger"> No me gusta (@post.DislikesCount) </button>
                                         </form>
                                     }
                                 }
                                 else
                                 {
                                     <form asp-controller="Reaction" asp-action="CreateDislike" asp-route-id="@post.Id" method="post" class="d-inline">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                              No me gusta (@post.DislikesCount)
-                                        </button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"> No me gusta (@post.DislikesCount) </button>
                                     </form>
                                 }
                             </div>

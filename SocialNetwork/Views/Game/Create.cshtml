@@ -1,0 +1,83 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.Game
+@model CreateGameViewModel
+
+@{
+    ViewData["Title"] = "Nueva Partida - Battleship";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center">
+                    <h5>Iniciar Nueva Partida de Battleship</h5>
+                </div>
+
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @if (Model.AvailableFriends.Count == 0)
+                    {
+                        <div class="alert alert-warning">
+                            <h6>No hay amigos disponibles para jugar</h6>
+                            <p class="mb-2">Esto puede ser porque:</p>
+                            <ul class="mb-3">
+                                <li>Ya tienes partidas activas con todos tus amigos</li>
+                                <li>Aún no tienes amigos agregados</li>
+                            </ul>
+                            <div class="d-flex justify-content-center">
+                                <a asp-controller="FriendRequest" asp-action="Create" class="btn btn-sm btn-primary me-2">Buscar Amigos</a>
+                                <a asp-controller="Game" asp-action="Index" class="btn btn-sm btn-secondary">Volver</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <form asp-action="Create" method="post">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Selecciona un amigo para jugar:</label>
+
+                                <div class="list-group mb-3">
+                                    @foreach (var friend in Model.AvailableFriends)
+                                    {
+                                        <label class="list-group-item">
+                                            <div class="d-flex align-items-center">
+                                                <input class="form-check-input me-3" type="radio" name="SelectedFriendId" value="@friend.Id" id="friend_@friend.Id">
+                                                <img src="~/@friend.Profile" alt="@friend.Username" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                                <span>@friend.Username</span>
+                                            </div>
+                                        </label>
+                                    }
+                                </div>
+
+                                <span asp-validation-for="SelectedFriendId" class="text-danger small"></span>
+                            </div>
+
+                            <div class="alert alert-info">
+                                <h6>Instrucciones:</h6>
+                                <ul class="mb-0">
+                                    <li>Selecciona un amigo de la lista.</li>
+                                    <li>Se creará una nueva partida de Battleship.</li>
+                                    <li>Ambos deberán posicionar 5 barcos en el tablero.</li>
+                                    <li>El primer turno de ataque será tuyo.</li>
+                                </ul>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-3">
+                                <a asp-controller="Game" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">Iniciar Partida</button>
+                            </div>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

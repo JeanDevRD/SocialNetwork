@@ -1,0 +1,110 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.Ship
+@model SelectShipViewModel
+
+@{
+    ViewData["Title"] = "Seleccionar Barco";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center">
+                    <h5>Posicionar Barcos - Selecciona un Barco</h5>
+                </div>
+                <div class="card-body">
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <div class="alert alert-info mb-4">
+                        <h6>Instrucciones:</h6>
+                        <ul class="mb-0">
+                            <li>Debes posicionar 5 barcos en total</li>
+                            <li>Selecciona un barco de la lista</li>
+                            <li>Luego elegirás dónde posicionarlo en el tablero</li>
+                            <li>Los barcos no pueden superponerse ni salirse del tablero</li>
+                        </ul>
+                    </div>
+
+                    <form asp-action="SelectPosition" method="get">
+                        <input type="hidden" name="gameId" value="@Model.GameId" />
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Barcos disponibles para posicionar:</label>
+
+                            <div class="list-group mb-3">
+                                @foreach (var ship in Model.AvailableShips)
+                                {
+                                    <label class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <input class="form-check-input me-3" type="radio" name="shipSize" value="@ship.Size" id="ship_@ship.Size">
+                                            <div class="flex-grow-1">
+                                                <strong>@ship.Description</strong>
+                                                <div class="mt-2">
+                                                    @for (int i = 0; i < ship.Size; i++)
+                                                    {
+                                                        <span class="badge bg-primary me-1" style="width:30px; height:30px; display:inline-block;"></span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                }
+                            </div>
+
+                            <span asp-validation-for="SelectedShipSize" class="text-danger small"></span>
+                        </div>
+
+                        <div class="card bg-light mb-4">
+                            <div class="card-body">
+                                <h6 class="mb-2">Progreso de posicionamiento:</h6>
+                                @{
+                                    var totalShips = 5;
+                                    var placedShips = totalShips - Model.AvailableShips.Count;
+                                    var percentage = (placedShips * 100) / totalShips;
+                                }
+                                <p class="mb-1"><strong>@placedShips de @totalShips barcos posicionados</strong></p>
+                                <div class="progress" style="height:25px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width:@percentage%"
+                                         aria-valuenow="@placedShips" aria-valuemin="0" aria-valuemax="@totalShips">
+                                        @percentage%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-controller="Game" asp-action="Index" class="btn btn-secondary">Volver a Partidas</a>
+                            <button type="submit" class="btn btn-primary">Siguiente</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="card mt-4 border-secondary">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="mb-0">Ayuda</h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2"><strong>Tipos de barcos a posicionar:</strong></p>
+                    <ul class="mb-0">
+                        <li>1 Portaaviones (5 posiciones)</li>
+                        <li>1 Acorazado (4 posiciones)</li>
+                        <li>2 Cruceros (3 posiciones cada uno)</li>
+                        <li>1 Destructor (2 posiciones)</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

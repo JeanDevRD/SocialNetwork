@@ -1,0 +1,148 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.Game
+@model GameViewModel
+
+@{
+    ViewData["Title"] = "Battleship";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>Battleship</h3>
+                <a asp-controller="Game" asp-action="Create" class="btn btn-primary">Nueva Partida</a>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Partidas Activas (@Model.ActiveGames.Count)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.ActiveGames.Count == 0)
+                    {
+                        <p class="text-muted text-center mb-3">No tienes partidas activas en este momento.</p>
+                        <div class="text-center"><a asp-controller="Game" asp-action="Create" 
+                            class="btn btn-sm btn-primary">Iniciar nueva partida</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Oponente</th>
+                                        <th>Fecha de inicio</th>
+                                        <th>Duración</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var game in Model.ActiveGames)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="~/@game.OpponentProfile" alt="@game.OpponentUsername"
+                                                         class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                                    <span>@game.OpponentUsername</span>
+                                                </div>
+                                            </td>
+                                            <td>@game.Started.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>@game.ElapsedTime</td>
+                                            <td>
+                                                <a asp-controller="Game" asp-action="SelectShip" asp-route-id="@game.GameId"
+                                                   class="btn btn-sm btn-success me-1">Entrar</a>
+                                                <a asp-controller="Game" asp-action="Surrender" asp-route-id="@game.GameId"
+                                                   class="btn btn-sm btn-outline-danger">Rendirse</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Historial de Partidas</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Stats.TotalGames > 0)
+                    {
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h3 class="mb-0">@Model.Stats.TotalGames</h3>
+                                        <small class="text-muted">Partidas jugadas</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h3 class="mb-0 text-success">@Model.Stats.GamesWon</h3>
+                                        <small class="text-muted">Partidas ganadas</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h3 class="mb-0 text-danger">@Model.Stats.GamesLost</h3>
+                                        <small class="text-muted">Partidas perdidas</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.HistoryGames.Count == 0)
+                    {
+                        <p class="text-muted text-center mb-0">Aún no tienes partidas finalizadas.</p>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var game in Model.HistoryGames)
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img src="~/@game.OpponentProfile" alt="@game.OpponentUsername"
+                                                 class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                            <div>
+                                                <h6 class="mb-1">Contra @game.OpponentUsername</h6>
+                                                <small class="text-muted d-block">Inicio: @game.Started.ToString("dd/MM/yyyy HH:mm")</small>
+                                                <small class="text-muted d-block">Fin: @game.Ended.ToString("dd/MM/yyyy HH:mm")</small>
+                                                <small class="text-muted d-block">Duración: @game.Duration</small>
+                                                <small>
+                                                    @if (game.Won)
+                                                    {
+                                                        <span class="badge bg-success">Victoria</span>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <span class="badge bg-danger">Derrota</span>
+                                                    }
+                                                </small>
+                                                <small class="text-muted ms-2"> Ganador: <strong>@game.WinnerUsername</strong></small>
+                                            </div>
+                                        </div>
+                                        <a asp-controller="Game" asp-action="Result" asp-route-id="@game.GameId"
+                                           class="btn btn-sm btn-outline-info">Ver resultado</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

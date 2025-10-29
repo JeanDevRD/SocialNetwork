@@ -40,7 +40,9 @@ namespace SocialNetwork.Infrastructure.Identity
             services.AddScoped<IAccountServiceWeb, AccountServiceWeb>();
 
             ConfigureDbContext(services, configuration);
-            #region
+
+            #region Identity Configuration
+
             services.AddIdentityCore<UserEntity>()
             .AddSignInManager()
             .AddEntityFrameworkStores<IdentityAppContext>()

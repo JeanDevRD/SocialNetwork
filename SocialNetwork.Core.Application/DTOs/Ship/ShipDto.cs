@@ -13,7 +13,7 @@ namespace SocialNetwork.Core.Application.DTOs.Ship
         public GameDto? Game { get; set; }
         public UserDto? Owner { get; set; }
         public required int GameId { get; set; }
-        public required int OwnerId { get; set; }
+        public required string OwnerId { get; set; }
         public required int Size { get; set; }
         public required int StartRow { get; set; }
         public required int StartColumn { get; set; }
