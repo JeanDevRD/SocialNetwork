@@ -1,0 +1,73 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.Game
+@model BoardViewModel
+
+@{
+    ViewData["Title"] = "Esperando Oponente";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark text-center">
+                    <h5>Esperando al Oponente</h5>
+                </div>
+
+                <div class="card-body text-center">
+                    <div class="alert alert-info">
+                        <h5>Has terminado de posicionar tus barcos</h5>
+                        <p>El otro jugador aún no ha terminado de configurar sus barcos.</p>
+                        <p class="mb-0">La partida comenzará automáticamente cuando ambos jugadores estén listos.</p>
+                    </div>
+
+                    <h6 class="mb-3">Tu tablero de barcos:</h6>
+
+                    <div class="table-responsive d-flex justify-content-center">
+                        <table class="table table-bordered text-center w-auto align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th></th>
+                                    @for (int col = 0; col < 12; col++)
+                                    {
+                                        <th>@col</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int row = 0; row < 12; row++)
+                                {
+                                    <tr>
+                                        <th class="table-secondary">@row</th>
+                                        @for (int col = 0; col < 12; col++)
+                                        {
+                                            var cell = Model.Board[row, col];
+                                            if (cell.IsOccupied)
+                                            {
+                                                <td class="bg-primary text-white fw-bold">B</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="bg-light"></td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-4">
+                        <h6>Leyenda:</h6>
+                        <ul class="list-unstyled mb-4">
+                            <li><span class="badge bg-primary">B</span> - Tus barcos</li>
+                            <li><span class="badge bg-light text-dark border">Gris</span> - Agua</li>
+                        </ul>
+                        <a asp-controller="Game" asp-action="Index" class="btn btn-secondary">Volver al Menú Principal</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

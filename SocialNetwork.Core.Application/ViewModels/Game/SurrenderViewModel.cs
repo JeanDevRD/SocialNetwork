@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace SocialNetwork.Core.Application.ViewModels.Game
 {
-    public class ActiveGameViewModel
+    public class SurrenderViewModel
     {
         public int GameId { get; set; }
         public string? OpponentUsername { get; set; } 
-        public string? OpponentProfile { get; set; }
-        public DateTime Started { get; set; }
-        public string? ElapsedTime { get; set; }
-        public string? Status { get; set; }
     }
 }

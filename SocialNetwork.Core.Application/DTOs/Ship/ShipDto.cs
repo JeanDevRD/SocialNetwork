@@ -10,6 +10,7 @@ namespace SocialNetwork.Core.Application.DTOs.Ship
 {
     public class ShipDto
     {
+        public required int Id { get; set; }
         public GameDto? Game { get; set; }
         public UserDto? Owner { get; set; }
         public required int GameId { get; set; }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Core.Application.DTOs.Game;
+using SocialNetwork.Core.Application.DTOs.Ship;
 using SocialNetwork.Core.Application.Interfaces;
 using SocialNetwork.Core.Application.ViewModels.Game;
 using SocialNetwork.Core.Application.ViewModels.Ship;
@@ -62,7 +63,8 @@ namespace SocialNetwork.Controllers
                     OpponentUsername = opponent?.UserName ?? "Usuario",
                     OpponentProfile = opponent?.Profile ?? "Images/default_profile.png",
                     Started = game.Started,
-                    ElapsedTime = $"{elapsedHours} horas"
+                    ElapsedTime = $"{elapsedHours} horas",
+                    Status = game.Status
                 });
             }
 
@@ -243,14 +245,13 @@ namespace SocialNetwork.Controllers
             if (availableShips.Count == 0)
             {
                 var opponentId = game.Player1Id == user.Id ? game.Player2Id : game.Player1Id;
-                var opponentShips = allShips
-                    .Where(s => s.GameId == id && s.OwnerId == opponentId)
-                    .ToList();
+
+                var opponentShips = allShips.Where(s => s.GameId == id && s.OwnerId == opponentId).ToList();
 
                 if (opponentShips.Count >= 5)
                 {
                     await _gameService.StartGameAsync(id);
-                    return RedirectToRoute(new { controller = "Game", action = "Attack", id = id });
+                    return RedirectToRoute(new { controller = "Attack", action = "Attack", id = id });
                 }
                 else
                 {
@@ -299,6 +300,7 @@ namespace SocialNetwork.Controllers
             foreach (var ship in userShips)
             {
                 var positions = GetShipPositions(ship.StartRow, ship.StartColumn, ship.Size, ship.Direction);
+
                 foreach (var pos in positions)
                 {
                     if (pos.Row >= 0 && pos.Row < 12 && pos.Column >= 0 && pos.Column < 12)
@@ -335,6 +337,138 @@ namespace SocialNetwork.Controllers
             }
 
             return positions;
+        }
+        public IActionResult SelectDirection(int gameId, int shipSize, int row, int column)
+        {
+            var viewModel = new SelectDirectionViewModel
+            {
+                GameId = gameId,
+                ShipSize = shipSize,
+                Row = row,
+                Column = column
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PlaceShip(PlaceShipViewModel vm)
+        {
+            var userSession = await _userManager.GetUserAsync(User);
+            if (userSession == null)
+            {
+                return RedirectToRoute(new { controller = "Login", action = "Index" });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return RedirectToRoute(new {controller = "Game", action = "SelectDirection", gameId = vm.GameId, shipSize = vm.ShipSize,
+                    row = vm.StartRow, column = vm.StartColumn });
+            }
+
+            var user = await _accountService.GetUserByUserName(userSession.UserName!);
+            var game = await _gameService.GetByIdAsync(vm.GameId);
+
+            if (game == null)
+            {
+                ViewBag.Error = "Partida no encontrada";
+                return RedirectToRoute(new { controller = "Game", action = "Index" });
+            }
+
+            var newShipPositions = GetShipPositions(vm.StartRow, vm.StartColumn, vm.ShipSize, vm.Direction!);
+
+            foreach (var pos in newShipPositions)
+            {
+                if (pos.Row < 0 || pos.Row >= 12 || pos.Column < 0 || pos.Column >= 12)
+                {
+                    TempData["Error"] = "El barco se sale del tablero. Cambia la celda o dirección.";
+
+                    return RedirectToRoute(new {controller = "Game", action = "SelectDirection", gameId = vm.GameId,
+                        shipSize = vm.ShipSize, row = vm.StartRow, column = vm.StartColumn });
+                }
+            }
+
+            var allShips = await _shipService.GetAllAsync();
+            var userShips = allShips.Where(s => s.GameId == vm.GameId && s.OwnerId == user.Id).ToList();
+
+            foreach (var existingShip in userShips)
+            {
+                var existingPositions = GetShipPositions( existingShip.StartRow, existingShip.StartColumn,
+                    existingShip.Size, existingShip.Direction );
+
+                foreach (var newPos in newShipPositions)
+                {
+                    if (existingPositions.Any(ep => ep.Row == newPos.Row && ep.Column == newPos.Column))
+                    {
+                        TempData["Error"] = "El barco colisiona con otro ya posicionado. Cambia la celda o dirección.";
+
+                        return RedirectToRoute(new { controller = "Game", action = "SelectDirection", gameId = vm.GameId, shipSize = vm.ShipSize, 
+                            row = vm.StartRow, column = vm.StartColumn });
+                    }
+                }
+            }
+            try
+            {
+                var shipDto = new ShipDto
+                {
+                    Id = 0,
+                    GameId = vm.GameId,
+                    OwnerId = user.Id,
+                    Size = vm.ShipSize,
+                    StartRow = vm.StartRow,
+                    StartColumn = vm.StartColumn,
+                    Direction = vm.Direction!,
+                    IsSunk = false
+                };
+
+                await _shipService.AddAsync(shipDto);
+                return RedirectToRoute(new { controller = "Game", action = "SelectShip", id = vm.GameId });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                TempData["Error"] = "Error al posicionar el barco";
+
+                return RedirectToRoute(new { controller = "Game", action = "SelectDirection", gameId = vm.GameId,
+                    shipSize = vm.ShipSize, row = vm.StartRow, column = vm.StartColumn });
+            }
+
+        }
+        public async Task<IActionResult> WaitingOpponent(int id)
+        {
+            var userSession = await _userManager.GetUserAsync(User);
+            if (userSession == null)
+            {
+                return RedirectToRoute(new { controller = "Login", action = "Index" });
+            }
+
+            var user = await _accountService.GetUserByUserName(userSession.UserName!);
+            var game = await _gameService.GetByIdAsync(id);
+
+            if (game == null)
+            {
+                ViewBag.Error = "Partida no encontrada";
+                return RedirectToRoute(new { controller = "Game", action = "Index" });
+            }
+
+            var allShips = await _shipService.GetAllAsync();
+            var userShips = allShips.Where(s => s.GameId == id && s.OwnerId == user.Id).ToList();
+
+            var viewModel = new BoardViewModel { GameId = id, ShipSize = 0 };
+
+            foreach (var ship in userShips)
+            {
+                var positions = GetShipPositions(ship.StartRow, ship.StartColumn, ship.Size, ship.Direction);
+                foreach (var pos in positions)
+                {
+                    if (pos.Row >= 0 && pos.Row < 12 && pos.Column >= 0 && pos.Column < 12)
+                    {
+                        viewModel.Board[pos.Row, pos.Column].IsOccupied = true;
+                    }
+                }
+            }
+
+            return View(viewModel);
         }
     }
 }

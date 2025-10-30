@@ -1,0 +1,72 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.Game
+@model SelectDirectionViewModel
+
+@{
+    ViewData["Title"] = "Seleccionar Dirección";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center">
+                    <h5>Selecciona la Dirección del Barco</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <div class="alert alert-info">
+                        <p><strong>Celda seleccionada:</strong> Fila @Model.Row, Columna @Model.Column</p>
+                        <p class="mb-0"><strong>Tamaño del barco:</strong> @Model.ShipSize posiciones</p>
+                    </div>
+
+                    <form asp-controller="Game" asp-action="PlaceShip" method="post">
+                        <input type="hidden" asp-for="GameId" />
+                        <input type="hidden" name="ShipSize" value="@Model.ShipSize" />
+                        <input type="hidden" name="StartRow" value="@Model.Row" />
+                        <input type="hidden" name="StartColumn" value="@Model.Column" />
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Selecciona la dirección:</label>
+                            <div class="list-group">
+                                <label class="list-group-item">
+                                    <input class="form-check-input me-2" type="radio" name="Direction" value="Up" id="dir_up">
+                                    <strong>Arriba</strong> - El barco se extenderá hacia arriba desde la celda
+                                </label>
+                                <label class="list-group-item">
+                                    <input class="form-check-input me-2" type="radio" name="Direction" value="Down" id="dir_down">
+                                    <strong>Abajo</strong> - El barco se extenderá hacia abajo desde la celda
+                                </label>
+                                <label class="list-group-item">
+                                    <input class="form-check-input me-2" type="radio" name="Direction" value="Left" id="dir_left">
+                                    <strong>Izquierda</strong> - El barco se extenderá hacia la izquierda desde la celda
+                                </label>
+                                <label class="list-group-item">
+                                    <input class="form-check-input me-2" type="radio" name="Direction" value="Right" id="dir_right">
+                                    <strong>Derecha</strong> - El barco se extenderá hacia la derecha desde la celda
+                                </label>
+                            </div>
+                            <span asp-validation-for="Direction" class="text-danger small"></span>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <strong>Importante:</strong> Asegúrate de que el barco no se salga del tablero ni colisione con otros barcos ya posicionados.
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-controller="Game" asp-action="SelectPosition" asp-route-gameId="@Model.GameId" asp-route-shipSize="@Model.ShipSize" class="btn btn-secondary">Volver a Tablero</a>
+                            <button type="submit" class="btn btn-primary">Posicionar Barco</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
