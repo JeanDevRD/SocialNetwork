@@ -1,0 +1,76 @@
+﻿@using SocialNetwork.Core.Application.ViewModels.Game
+@model BoardViewModel
+
+@{
+    ViewData["Title"] = "Mi Tablero";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white text-center">
+                    <h5>Mi Tablero de Barcos</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <div class="alert alert-info">Aquí puedes ver cómo posicionaste tus barcos en esta partida</div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    @for (int col = 0; col < 12; col++)
+                                    {
+                                        <th>@col</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int row = 0; row < 12; row++)
+                                {
+                                    <tr>
+                                        <th>@row</th>
+                                        @for (int col = 0; col < 12; col++)
+                                        {
+                                            var cell = Model.Board[row, col];
+                                            if (cell.IsOccupied)
+                                            {
+                                                <td class="bg-primary text-white">B</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="bg-light"></td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-3">
+                        <h6>Leyenda:</h6>
+                        <ul class="list-unstyled">
+                            <li><span class="badge bg-primary">B</span> - Tus barcos</li>
+                            <li><span class="badge bg-light text-dark">Gris</span> - Agua</li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <a asp-controller="Attack" asp-action="Attack" asp-route-id="@Model.GameId" class="btn btn-secondary">Volver al ataque</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
